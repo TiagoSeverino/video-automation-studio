@@ -5,6 +5,7 @@
 	"scripts": {
 		"start": "remotion preview src/index.tsx",
 		"build": "remotion render src/index.tsx MatchResult out/video.mp4",
+		"server": "ts-node server.ts",
 		"upgrade": "remotion upgrade",
 		"test": "eslint src --ext ts,tsx,js,jsx && tsc"
 	},
