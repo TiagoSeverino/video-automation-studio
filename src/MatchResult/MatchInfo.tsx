@@ -9,10 +9,20 @@ export const MatchInfo = ({
 	stars: number;
 	tournament: string;
 }) => {
+	let currentLength = 0;
+
+	const tournamentName = tournament
+		.split(' ')
+		.map((t) => {
+			currentLength += t.length;
+			return currentLength > 30 ? `` : t;
+		})
+		.join(' ');
+
 	return (
 		<div className="center">
 			<div className="tournamentcontainer">
-				<span>{tournament}</span>
+				<span>{tournamentName}</span>
 			</div>
 			<p className="resultdisplay">
 				<span className={team1Rounds >= team2Rounds ? 'won' : 'lost'}>
