@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+html,
+body {
+	font-family: 'Roboto', sans-serif;
+}
+
+.backgroundimg {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+}
+
+.container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+
+
+}
+
+.card {
+	width: 85%;
+	margin-bottom: 50px;
+	background-color: #f0f0f0bb;
+	padding: 24px 48px;
+	border-radius: 40px;
+	backdrop-filter: blur(6px);
+}
+
+/* Clear floats after the columns */
+.card:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+.team1 {
+	float: left;
+}
+
+.team2 {
+	float: right;
+}
+
+.resultdisplay {
+	font-size: 48px;
+	font-weight: bold;
+}
+
+.center {
+	display: flex;
+	align-items: center;
+	height: 180px;
+	position: absolute;
+	left: 0px;
+	right: 0px;
+}
+
+.resultdisplay,
+.starscontainer,
+.tournamentcontainer {
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	text-align: center;
+}
+
+.resultdisplay {
+	margin: 0;
+	padding: 0;
+	color: #fff;
+}
+
+.starscontainer {
+	bottom: 10px;
+}
+
+.tournamentcontainer {
+	top: 10px;
+}
+
+.starscontainer span,
+.tournamentcontainer span {
+	background-color: rgba(0, 0, 0, 0.5);
+	padding: 12px 16px;
+	border-radius: 50px;
+	font-size: 28px;
+	color: #fff;
+}
+
+.won {
+	color: #0dff00;
+}
+
+.lost {
+	color: #ff0000;
+}
+
+.logo {
+	width: 180px;
+	height: 180px;
+}
