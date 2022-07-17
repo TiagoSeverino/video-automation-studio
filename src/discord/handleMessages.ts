@@ -34,15 +34,20 @@ const handleUserMessage = {
 
 		const startDate = new Date();
 		startDate.setDate(startDate.getDate() - days);
-		const matches = await getMatches(startDate, new Date());
 
-		msg.reply(`Rendering ${matches.length} matches`);
+		try {
+			const matches = await getMatches(startDate, new Date());
 
-		const paths = await renderMatchResult(matches);
+			msg.reply(`Rendering ${matches.length} matches`);
 
-		paths.map((path) =>
-			msg.reply(path, {files: [`${path}.mp4`, `${path}.txt`]})
-		);
+			const paths = await renderMatchResult(matches);
+
+			paths.map((path) =>
+				msg.reply(path, {files: [`${path}.mp4`, `${path}.txt`]})
+			);
+		} catch {
+			msg.reply('Error getting matches');
+		}
 	},
 } as MessageHandler;
 
