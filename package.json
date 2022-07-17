@@ -19,7 +19,7 @@
 		"dotenv": "^16.0.1",
 		"eslint": "^8.14.0",
 		"fs": "^0.0.1-security",
-		"hltv": "^3.4.1",
+		"hltv": "TiagoSeverino/HLTV",
 		"prettier": "^2.2.1",
 		"react": "^18.0.0",
 		"react-dom": "^18.0.0",
