@@ -15,7 +15,7 @@
 	"dependencies": {
 		"@remotion/cli": "^3.0.0",
 		"@remotion/eslint-config": "^3.0.0",
-		"discord.js": "^13.8.1",
+		"discord.js": "^12.5.1",
 		"dotenv": "^16.0.1",
 		"eslint": "^8.14.0",
 		"hltv": "^3.4.1",
