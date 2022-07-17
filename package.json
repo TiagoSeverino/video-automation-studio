@@ -5,8 +5,8 @@
 	"scripts": {
 		"start": "remotion preview src/index.tsx",
 		"build": "remotion render src/index.tsx MatchResult out/video.mp4",
-		"start:server": "ts-node src/server.ts",
-		"dev:server": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules src/server.ts",
+		"start:server": "ts-node src/index.ts",
+		"dev:server": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules src/index.ts",
 		"upgrade": "remotion upgrade",
 		"test": "eslint src --ext ts,tsx,js,jsx && tsc"
 	},
