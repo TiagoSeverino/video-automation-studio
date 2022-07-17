@@ -30,9 +30,9 @@ const getMatch = async (id: number) => {
 };
 
 const dateToString = (date: Date) =>
-	`${date.getFullYear()}-${('0' + date.getMonth().toString()).slice(-2)}-${(
-		'0' + date.getDate().toString()
-	).slice(-2)}`;
+	`${date.getFullYear()}-${('0' + (date.getMonth() + 1).toString()).slice(
+		-2
+	)}-${('0' + date.getDate().toString()).slice(-2)}`;
 
 export const getMatches = async (
 	startDate: Date,
