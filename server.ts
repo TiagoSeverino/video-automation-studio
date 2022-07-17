@@ -39,31 +39,39 @@ const start = async (startDate?: string, endDate?: string) => {
 	const matches = await getMatches(startDate, endDate);
 
 	const chunkSize = 5;
-	let currentPart = 0;
 	const totalParts = Math.ceil(matches.length / chunkSize);
 
-	if (matches.length > 0)
+	if (matches.length > 0) {
+		console.log(`Rendering ${matches.length} matches`);
+
+		const chunks = [];
 		for (let i = 0; i < matches.length; i += chunkSize) {
-			currentPart++;
-			const chunk = matches.slice(i, i + chunkSize);
-
-			const outputLocation = `out/${compositionId} (${startDate} to ${endDate}) ${currentPart} of ${totalParts}.mp4`;
-			console.log('Attempting to render:', outputLocation);
-			await renderMedia({
-				composition,
-				serveUrl: bundleLocation,
-				codec: 'h264',
-				outputLocation,
-				inputProps: {
-					matches: chunk,
-				},
-			});
-
-			console.log('Rendered:', outputLocation);
+			chunks.push(matches.slice(i, i + chunkSize));
 		}
-	else console.log('No matches found.');
 
-	console.log('Render done!');
+		await Promise.all(
+			chunks.map(async (chunk, k) => {
+				const outputLocation = `out/${compositionId} (${startDate} to ${endDate}) ${
+					k + 1
+				} of ${totalParts}.mp4`;
+				console.log('Attempting to render:', outputLocation);
+
+				await renderMedia({
+					composition,
+					serveUrl: bundleLocation,
+					codec: 'h264',
+					outputLocation,
+					inputProps: {
+						matches: chunk,
+					},
+				});
+
+				console.log('Rendered:', outputLocation);
+			})
+		);
+
+		console.log('Render done!');
+	} else console.log('No matches found.');
 };
 
 start('2022-07-10', '2022-07-15');
