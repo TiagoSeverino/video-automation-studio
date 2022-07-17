@@ -1,4 +1,5 @@
 import path from 'path';
+import {writeFileSync} from 'fs';
 import {bundle} from '@remotion/bundler';
 import {getCompositions, renderMedia} from '@remotion/renderer';
 import {getMatches} from './csgoData';
@@ -55,6 +56,16 @@ const start = async (startDate?: string, endDate?: string) => {
 					k + 1
 				} of ${totalParts}.mp4`;
 				console.log('Attempting to render:', outputLocation);
+
+				writeFileSync(
+					`${outputLocation.split('.')[0]}.txt`,
+					chunk
+						.map(
+							(m) =>
+								`${m.team1.name} ${m.team1.rounds} - ${m.team2.rounds} ${m.team2.name} at ${m.tournament}\n`
+						)
+						.join('')
+				);
 
 				await renderMedia({
 					composition,
