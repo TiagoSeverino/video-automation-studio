@@ -13,7 +13,8 @@ const backgrounds = [
 ];
 
 export const Background: React.FC<{seed: string}> = ({seed}) => {
-	const background = backgrounds[Math.floor(random(seed) * backgrounds.length)];
+	const background =
+		backgrounds[Math.floor(random(seed) * backgrounds.length)];
 
 	return <Img src={background} className="backgroundimg" />;
 };

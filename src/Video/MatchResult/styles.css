@@ -18,8 +18,6 @@ body {
 	justify-content: center;
 	width: 100%;
 	height: 100%;
-
-
 }
 
 .card {
@@ -33,7 +31,7 @@ body {
 
 /* Clear floats after the columns */
 .card:after {
-	content: "";
+	content: '';
 	display: table;
 	clear: both;
 }

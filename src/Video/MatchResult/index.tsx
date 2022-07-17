@@ -33,7 +33,12 @@ export const MatchResult: React.FC<{matches: ResultProps[]}> = ({matches}) => {
 					<Result
 						key={index}
 						resultProps={match}
-						entrance={cardEntrace({index, fps, frame, size: matches.length})}
+						entrance={cardEntrace({
+							index,
+							fps,
+							frame,
+							size: matches.length,
+						})}
 					/>
 				))}
 			</AbsoluteFill>

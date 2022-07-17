@@ -27,7 +27,11 @@ export const Result: React.FC<{
 		<div
 			className="card"
 			style={{
-				transform: `translateY(${interpolate(entrance, [0, 1], [300, 0])}px)`,
+				transform: `translateY(${interpolate(
+					entrance,
+					[0, 1],
+					[300, 0]
+				)}px)`,
 				opacity: entrance,
 			}}
 		>
