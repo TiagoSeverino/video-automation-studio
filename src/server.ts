@@ -2,7 +2,7 @@ import path from 'path';
 import {writeFileSync} from 'fs';
 import {bundle} from '@remotion/bundler';
 import {getCompositions, renderMedia} from '@remotion/renderer';
-import {getMatches} from './csgoData';
+import {getMatches} from './utils/csgo';
 
 const start = async (startDate?: string, endDate?: string) => {
 	if (!startDate || !endDate) {
@@ -85,4 +85,5 @@ const start = async (startDate?: string, endDate?: string) => {
 	} else console.log('No matches found.');
 };
 
-start('2022-07-10', '2022-07-15');
+//start('2022-07-10', '2022-07-15');
+console.log('123');
