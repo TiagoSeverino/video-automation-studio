@@ -1,4 +1,6 @@
-import { Message } from 'discord.js';
+import {Message} from 'discord.js';
+import {renderMatchResult} from '../renderer';
+import {getMatches} from '../utils/csgo';
 import client from './discord';
 
 interface MessageHandler {
@@ -10,7 +12,7 @@ interface CommandDescription {
 }
 
 const userMessageDescription = {
-	ping: ['pong!', ['<query>']],
+	render: ['Renders a video from a list of matches', ['<days (Default: 1)>']],
 } as CommandDescription;
 
 const handleUserMessage = {
@@ -25,8 +27,22 @@ const handleUserMessage = {
 
 		msg.reply(message);
 	},
-	ping: (_, msg) => {
-		msg.reply('Pong!');
+	render: async ([daysStr], msg) => {
+		const days = daysStr ? parseInt(daysStr) : 1;
+
+		if (isNaN(days)) return msg.reply('Invalid days');
+
+		const startDate = new Date();
+		startDate.setDate(startDate.getDate() - days);
+		const matches = await getMatches(startDate, new Date());
+
+		msg.reply(`Rendering ${matches.length} matches`);
+
+		const paths = await renderMatchResult(matches);
+
+		paths.map((path) =>
+			msg.reply(path, {files: [`${path}.mp4`, `${path}.txt`]})
+		);
 	},
 } as MessageHandler;
 

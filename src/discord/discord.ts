@@ -3,7 +3,7 @@ import Discord from 'discord.js';
 const client = new Discord.Client();
 
 client.on('ready', () => {
-	client.user?.setActivity('Hello World');
+	client.user?.setActivity('!render');
 	console.log(`Logged in as ${client.user?.username}!`);
 });
 
