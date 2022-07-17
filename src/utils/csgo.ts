@@ -1,4 +1,4 @@
-import {HLTV} from 'hltv';
+import HLTV from 'hltv/src';
 
 export interface MatchResult {
 	team1: {
