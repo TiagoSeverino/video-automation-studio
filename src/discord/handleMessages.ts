@@ -28,7 +28,7 @@ const handleUserMessage = {
 		msg.reply(message);
 	},
 	render: async ([daysStr], msg) => {
-		const days = daysStr ? parseInt(daysStr) : 1;
+		const days = daysStr ? parseInt(daysStr) - 1 : 0;
 
 		if (isNaN(days)) return msg.reply('Invalid days');
 
