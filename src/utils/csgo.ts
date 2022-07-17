@@ -20,6 +20,7 @@ const getResults = async (startDate: string, endDate: string) => {
 		startDate,
 		endDate,
 		stars: 1,
+		delayBetweenPageRequests: 3000,
 	});
 };
 
