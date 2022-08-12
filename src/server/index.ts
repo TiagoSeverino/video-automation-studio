@@ -3,13 +3,8 @@ import express from 'express';
 const port = 3333;
 const app = express();
 
-app.get('/oauth2callback', (req, res) => {
-	const authCode = req.query.code;
-	console.log(`> [youtube-robot] Consent given: ${authCode}`);
+app.get('/oauth2callback', (req, res) =>
+	res.send(`<h1>${req.query.code}</h1>`)
+);
 
-	res.send(`<h1>Your auth code: ${authCode}</h1>`);
-});
-
-app.listen(port, () => {
-	console.log(`> [youtube-robot] Listening on http://localhost:${port}`);
-});
+app.listen(port, () => console.log(`Listening on http://localhost:${port}`));

@@ -1,0 +1,115 @@
+import {OAuth2Client} from 'google-auth-library';
+import {google} from 'googleapis';
+
+const youtube = google.youtube({version: 'v3'});
+const OAuth2 = google.auth.OAuth2;
+const fs = require('fs');
+
+interface VideoData {
+	path: string;
+	title: string;
+	description: string;
+	tags: string[];
+	thumbnail?: string;
+}
+
+export default async function uploadYoutube(videoData: VideoData) {
+	const videoInformation = await uploadVideo(videoData);
+
+	videoData.thumbnail &&
+		(await uploadThumbnail(videoInformation.id!, videoData.thumbnail));
+
+	return videoInformation;
+}
+
+const createOAuthClient = () => {
+	const credentials = require('../../youtube-credentials.json');
+
+	const OAuthClient = new OAuth2(
+		credentials.installed.client_id,
+		credentials.installed.client_secret,
+		credentials.installed.redirect_uris[0]
+	);
+
+	return OAuthClient;
+};
+
+export const requestYoutubeConsentUrl = () =>
+	createOAuthClient().generateAuthUrl({
+		scope: ['https://www.googleapis.com/auth/youtube'],
+	});
+
+const requestGoogleForAccessTokens = async (
+	OAuthClient: OAuth2Client,
+	authorizationToken: string
+) => {
+	return new Promise((resolve, reject) => {
+		OAuthClient.getToken(authorizationToken, (error, tokens) => {
+			if (error) return reject(error);
+
+			OAuthClient.setCredentials(tokens!);
+			resolve(tokens);
+		});
+	});
+};
+
+const setGlobalGoogleAuthentication = (OAuthClient: OAuth2Client) => {
+	google.options({
+		auth: OAuthClient,
+	});
+};
+
+export const authenticateWithOAuthToken = async (token: string) => {
+	const OAuthClient = await createOAuthClient();
+
+	const credentials = await requestGoogleForAccessTokens(OAuthClient, token);
+	await setGlobalGoogleAuthentication(OAuthClient);
+
+	return credentials;
+};
+
+export const authenticateWithOAuthCredentials = async (credentials: {
+	access_token: string;
+	refresh_token: string;
+	scope: string;
+	token_type: string;
+	expiry_date: number;
+}) => {
+	const OAuthClient = createOAuthClient();
+	OAuthClient.setCredentials(credentials);
+	await setGlobalGoogleAuthentication(OAuthClient);
+};
+
+const uploadVideo = async ({path, title, description, tags}: VideoData) => {
+	const requestParameters = {
+		part: ['snippet', 'status'],
+		requestBody: {
+			snippet: {
+				title,
+				description,
+				tags,
+			},
+			status: {
+				privacyStatus: 'public',
+			},
+		},
+		media: {
+			body: fs.createReadStream(path),
+		},
+	};
+	const youtubeResponse = await youtube.videos.insert(requestParameters);
+
+	return youtubeResponse.data;
+};
+
+const uploadThumbnail = async (videoId: string, thumnailPath: string) => {
+	const requestParameters = {
+		videoId: videoId,
+		media: {
+			mimeType: 'image/jpeg',
+			body: fs.createReadStream(thumnailPath),
+		},
+	};
+
+	await youtube.thumbnails.set(requestParameters);
+};

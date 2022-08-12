@@ -1,3 +1,6 @@
+youtube-credentials.json
+*.youtube.json
+
 node_modules
 dist
 .DS_Store

@@ -24,7 +24,7 @@ const getResults = async (startDate: string, endDate: string) => {
 	});
 };
 
-const dateToString = (date: Date) =>
+export const dateToString = (date: Date) =>
 	`${date.getFullYear()}-${('0' + (date.getMonth() + 1).toString()).slice(
 		-2
 	)}-${('0' + date.getDate().toString()).slice(-2)}`;

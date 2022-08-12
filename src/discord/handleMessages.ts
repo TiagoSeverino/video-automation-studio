@@ -1,10 +1,16 @@
 import {Message} from 'discord.js';
+import {existsSync, readFileSync, writeFileSync} from 'fs';
 import {renderMatchResult} from '../renderer';
-import {getMatches} from '../utils/csgo';
+import {dateToString, getMatches} from '../utils/csgo';
+import uploadYoutube, {
+	authenticateWithOAuthCredentials,
+	authenticateWithOAuthToken,
+	requestYoutubeConsentUrl,
+} from '../youtube';
 import client from './discord';
 
 interface MessageHandler {
-	[cmd: string]: (args: string[], message: Message) => Promise<void> | void;
+	[cmd: string]: (args: string[], message: Message) => Promise<any> | any;
 }
 
 interface CommandDescription {
@@ -35,19 +41,74 @@ const handleUserMessage = {
 		const startDate = new Date();
 		startDate.setDate(startDate.getDate() - days);
 
-		try {
-			const matches = await getMatches(startDate, new Date());
+		const matches = await getMatches(startDate, new Date());
 
-			msg.reply(`Rendering ${matches.length} matches`);
+		if (matches.length === 0)
+			return msg.reply('No matches found for the given date range');
 
-			const paths = await renderMatchResult(matches);
+		msg.reply(`Rendering ${matches.length} matches`);
 
-			paths.map((path) =>
-				msg.reply(path, {files: [`${path}.mp4`, `${path}.txt`]})
+		const paths = await renderMatchResult(matches);
+
+		if (!existsSync(`${msg.author.id}.youtube.json`)) {
+			const youtubeConsentUrl = requestYoutubeConsentUrl();
+			await msg.reply(`Login to Youtube: ${youtubeConsentUrl}`);
+
+			const youtubeToken = (
+				await msg.channel.awaitMessages(
+					(m) => m.author.id === msg.author.id,
+					{
+						max: 1,
+						time: 120000,
+						errors: ['time'],
+					}
+				)
+			).first()!.content;
+
+			const createntials = await authenticateWithOAuthToken(youtubeToken);
+			writeFileSync(
+				`${msg.author.id}.youtube.json`,
+				JSON.stringify(createntials)
 			);
-		} catch {
-			msg.reply('Error getting matches');
+		} else {
+			const credentials = JSON.parse(
+				readFileSync(`${msg.author.id}.youtube.json`, 'utf8')
+			);
+			await authenticateWithOAuthCredentials(credentials);
 		}
+
+		paths.map(async (path, k) => {
+			const videoData = {
+				title: `CSGO Match Results ${dateToString(startDate)}${
+					paths.length > 1 ? ` - ${k + 1}/${paths.length}` : ''
+				}`,
+				description: readFileSync(`${path}.txt`, 'utf8'),
+				tags: [
+					...new Set(
+						[
+							'csgo',
+							'counter',
+							'strike',
+							'counterstrike',
+							'counter-stike',
+							'match',
+							'result',
+							'hltv',
+							...matches.map((m) => m.team1.name),
+							...matches.map((m) => m.team2.name),
+							...matches.map((m) => m.tournament || ''),
+						].filter((t) => t.length > 0)
+					),
+				],
+				path: `${path}.mp4`,
+			};
+
+			const youtubeResponse = await uploadYoutube(videoData);
+
+			msg.reply(`https://youtu.be/${youtubeResponse.id}`, {
+				files: [`${path}.mp4`],
+			});
+		});
 	},
 } as MessageHandler;
 
@@ -60,6 +121,11 @@ client.on('message', async (msg) => {
 	const [cmd, ...args] = msg.content.substring(1).split(' ');
 
 	if (Object.getOwnPropertyNames(handleUserMessage).includes(cmd)) {
-		await handleUserMessage[cmd](args, msg);
+		try {
+			await handleUserMessage[cmd](args, msg);
+		} catch (err) {
+			console.error(err);
+			msg.reply('Error');
+		}
 	}
 });
