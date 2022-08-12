@@ -1,5 +1,6 @@
 import {Message} from 'discord.js';
 import {existsSync, readFileSync, writeFileSync} from 'fs';
+import downloader from '../downloader';
 import {renderMatchResult} from '../renderer';
 import {dateToString, getMatches} from '../utils/csgo';
 import uploadYoutube, {
@@ -17,6 +18,35 @@ interface CommandDescription {
 	[cmd: string]: [string, string[]];
 }
 
+const handleYoutubeLogin = async (msg: Message) => {
+	if (!existsSync(`${msg.author.id}.youtube.json`)) {
+		const youtubeConsentUrl = requestYoutubeConsentUrl();
+		await msg.reply(`Login to Youtube: ${youtubeConsentUrl}`);
+
+		const youtubeToken = (
+			await msg.channel.awaitMessages(
+				(m) => m.author.id === msg.author.id,
+				{
+					max: 1,
+					time: 120000,
+					errors: ['time'],
+				}
+			)
+		).first()!.content;
+
+		const credentials = await authenticateWithOAuthToken(youtubeToken);
+		writeFileSync(
+			`${msg.author.id}.youtube.json`,
+			JSON.stringify(credentials)
+		);
+	} else {
+		const credentials = JSON.parse(
+			readFileSync(`${msg.author.id}.youtube.json`, 'utf8')
+		);
+		await authenticateWithOAuthCredentials(credentials);
+	}
+};
+
 const userMessageDescription = {
 	render: ['Renders a video from a list of matches', ['<days (Default: 1)>']],
 } as CommandDescription;
@@ -32,6 +62,10 @@ const handleUserMessage = {
 			.join('\n');
 
 		msg.reply(message);
+	},
+	download: async ([url], msg) => {
+		const path = await downloader(url);
+		msg.reply(`Downloaded to ${path}`);
 	},
 	render: async ([daysStr], msg) => {
 		const days = daysStr ? parseInt(daysStr) - 1 : 0;
@@ -50,32 +84,7 @@ const handleUserMessage = {
 
 		const paths = await renderMatchResult(matches);
 
-		if (!existsSync(`${msg.author.id}.youtube.json`)) {
-			const youtubeConsentUrl = requestYoutubeConsentUrl();
-			await msg.reply(`Login to Youtube: ${youtubeConsentUrl}`);
-
-			const youtubeToken = (
-				await msg.channel.awaitMessages(
-					(m) => m.author.id === msg.author.id,
-					{
-						max: 1,
-						time: 120000,
-						errors: ['time'],
-					}
-				)
-			).first()!.content;
-
-			const createntials = await authenticateWithOAuthToken(youtubeToken);
-			writeFileSync(
-				`${msg.author.id}.youtube.json`,
-				JSON.stringify(createntials)
-			);
-		} else {
-			const credentials = JSON.parse(
-				readFileSync(`${msg.author.id}.youtube.json`, 'utf8')
-			);
-			await authenticateWithOAuthCredentials(credentials);
-		}
+		await handleYoutubeLogin(msg);
 
 		paths.map(async (path, k) => {
 			const videoData = {
