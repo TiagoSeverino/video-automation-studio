@@ -27,6 +27,19 @@ const waitReply = async (msg: Message) =>
 		})
 	).first()!.content;
 
+const promptVideoData = async (msg: Message) => {
+	msg.reply('Enter video title:');
+	const title = await waitReply(msg);
+
+	msg.reply('Enter video description:');
+	const description = await waitReply(msg);
+
+	msg.reply('Enter video tags (separated by spaces):');
+	const tags = await (await waitReply(msg)).split(' ');
+
+	return {title, description, tags};
+};
+
 const handleYoutubeLogin = async (msg: Message) => {
 	if (!existsSync(`${msg.author.id}.youtube.json`)) {
 		const youtubeConsentUrl = requestYoutubeConsentUrl();
@@ -64,8 +77,18 @@ const handleUserMessage = {
 		msg.reply(message);
 	},
 	download: async ([url], msg) => {
-		const path = await downloader(url);
-		msg.reply(`Downloaded to ${path}`);
+		const pathAsync = downloader(url);
+
+		const videoData = await promptVideoData(msg);
+
+		const path = (await pathAsync) as string;
+
+		await handleYoutubeLogin(msg);
+		const youtubeResponse = await uploadYoutube({
+			path,
+			...videoData,
+		});
+		msg.reply(`https://youtu.be/${youtubeResponse.id}`);
 	},
 	render: async ([daysStr], msg) => {
 		const days = daysStr ? parseInt(daysStr) - 1 : 0;
@@ -113,10 +136,7 @@ const handleUserMessage = {
 			};
 
 			const youtubeResponse = await uploadYoutube(videoData);
-
-			msg.reply(`https://youtu.be/${youtubeResponse.id}`, {
-				files: [`${path}.mp4`],
-			});
+			msg.reply(`https://youtu.be/${youtubeResponse.id}`);
 		});
 	},
 } as MessageHandler;
