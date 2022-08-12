@@ -18,21 +18,21 @@ interface CommandDescription {
 	[cmd: string]: [string, string[]];
 }
 
+const waitReply = async (msg: Message) =>
+	(
+		await msg.channel.awaitMessages((m) => m.author.id === msg.author.id, {
+			max: 1,
+			time: 120000,
+			errors: ['time'],
+		})
+	).first()!.content;
+
 const handleYoutubeLogin = async (msg: Message) => {
 	if (!existsSync(`${msg.author.id}.youtube.json`)) {
 		const youtubeConsentUrl = requestYoutubeConsentUrl();
 		await msg.reply(`Login to Youtube: ${youtubeConsentUrl}`);
 
-		const youtubeToken = (
-			await msg.channel.awaitMessages(
-				(m) => m.author.id === msg.author.id,
-				{
-					max: 1,
-					time: 120000,
-					errors: ['time'],
-				}
-			)
-		).first()!.content;
+		const youtubeToken = await waitReply(msg);
 
 		const credentials = await authenticateWithOAuthToken(youtubeToken);
 		writeFileSync(
