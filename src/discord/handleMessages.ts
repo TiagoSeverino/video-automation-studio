@@ -61,7 +61,8 @@ const handleYoutubeLogin = async (msg: Message) => {
 };
 
 const userMessageDescription = {
-	render: ['Renders a video from a list of matches', ['<days (Default: 1)>']],
+	csgo: ['Renders a video from hltv results', ['<days (Default: 1)>']],
+	download: ['Downloads a video and reupload', ['<url>']],
 } as CommandDescription;
 
 const handleUserMessage = {
@@ -90,7 +91,7 @@ const handleUserMessage = {
 		});
 		msg.reply(`https://youtu.be/${youtubeResponse.id}`);
 	},
-	render: async ([daysStr], msg) => {
+	csgo: async ([daysStr], msg) => {
 		const days = daysStr ? parseInt(daysStr) - 1 : 0;
 
 		if (isNaN(days)) return msg.reply('Invalid days');
