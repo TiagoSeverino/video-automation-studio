@@ -7,6 +7,7 @@ import uploadYoutube, {
 	authenticateWithOAuthCredentials,
 	authenticateWithOAuthToken,
 	requestYoutubeConsentUrl,
+	VideoData,
 } from '../youtube';
 import client from './discord';
 
@@ -26,6 +27,26 @@ const waitReply = async (msg: Message) =>
 			errors: ['time'],
 		})
 	).first()!.content;
+
+const handleQuestion = async (msg: Message, query: string) => {
+	const options = ['✅', '❌'];
+
+	const question = await msg.reply(query);
+
+	options.map((option) => question.react(option));
+
+	const reaction = await question.awaitReactions(
+		(reaction, user) => {
+			return (
+				user.id === msg.author.id &&
+				options.includes(reaction.emoji.name)
+			);
+		},
+		{max: 1, time: 120000, errors: ['time']}
+	);
+
+	return reaction.first()!.emoji.name === options[0];
+};
 
 const promptVideoData = async (msg: Message) => {
 	msg.reply('Enter video title:');
@@ -60,6 +81,17 @@ const handleYoutubeLogin = async (msg: Message) => {
 	}
 };
 
+const handleYoutubeUpload = async (msg: Message, videoData: VideoData) => {
+	const canUploadYoutube = await handleQuestion(msg, 'Upload to Youtube?');
+
+	if (!canUploadYoutube) return false;
+
+	await handleYoutubeLogin(msg);
+
+	const youtubeResponse = await uploadYoutube(videoData);
+	await msg.reply(`https://youtu.be/${youtubeResponse.id}`);
+};
+
 const userMessageDescription = {
 	csgo: ['Renders a video from hltv results', ['<days (Default: 1)>']],
 	download: ['Downloads a video and reupload', ['<url>']],
@@ -84,12 +116,10 @@ const handleUserMessage = {
 
 		const path = (await pathAsync) as string;
 
-		await handleYoutubeLogin(msg);
-		const youtubeResponse = await uploadYoutube({
+		await handleYoutubeUpload(msg, {
 			path,
 			...videoData,
 		});
-		msg.reply(`https://youtu.be/${youtubeResponse.id}`);
 	},
 	csgo: async ([daysStr], msg) => {
 		const days = daysStr ? parseInt(daysStr) - 1 : 0;
@@ -107,8 +137,6 @@ const handleUserMessage = {
 		msg.reply(`Rendering ${matches.length} matches`);
 
 		const paths = await renderMatchResult(matches);
-
-		await handleYoutubeLogin(msg);
 
 		paths.map(async (path, k) => {
 			const videoData = {
@@ -136,8 +164,7 @@ const handleUserMessage = {
 				path: `${path}.mp4`,
 			};
 
-			const youtubeResponse = await uploadYoutube(videoData);
-			msg.reply(`https://youtu.be/${youtubeResponse.id}`);
+			await handleYoutubeUpload(msg, videoData);
 		});
 	},
 } as MessageHandler;

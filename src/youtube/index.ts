@@ -5,7 +5,7 @@ const youtube = google.youtube({version: 'v3'});
 const OAuth2 = google.auth.OAuth2;
 const fs = require('fs');
 
-interface VideoData {
+export interface VideoData {
 	path: string;
 	title: string;
 	description: string;
