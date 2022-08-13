@@ -1,7 +1,9 @@
 import {Message} from 'discord.js';
 import {existsSync, readFileSync, writeFileSync} from 'fs';
+
 import downloader from '../downloader';
 import {renderMatchResult} from '../renderer';
+import {getTwitterThread} from '../twitter';
 import {dateToString, getMatches} from '../utils/csgo';
 import uploadYoutube, {
 	authenticateWithOAuthCredentials,
@@ -120,6 +122,17 @@ const handleUserMessage = {
 			path,
 			...videoData,
 		});
+	},
+	tt: async ([url], msg) => {
+		const tweetId = url.split('/').pop();
+
+		if (!tweetId) return msg.reply('Invalid tweet url. Try again.');
+
+		const {tweet, quotes} = await getTwitterThread(tweetId);
+
+		if (!tweet) return msg.reply('Invalid tweet url. Try again.');
+
+		msg.reply(tweet.text);
 	},
 	csgo: async ([daysStr], msg) => {
 		const days = daysStr ? parseInt(daysStr) - 1 : 0;
