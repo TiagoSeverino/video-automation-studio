@@ -33,9 +33,11 @@ export const MatchInfo = ({
 					{team2Rounds}
 				</span>
 			</p>
-			<div className="starscontainer">
-				<span>{'⭐'.repeat(stars)}</span>
-			</div>
+			{stars > 0 && (
+				<div className="starscontainer">
+					<span>{'⭐'.repeat(stars)}</span>
+				</div>
+			)}
 		</div>
 	);
 };
