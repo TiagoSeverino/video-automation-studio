@@ -30,7 +30,11 @@ const waitReply = async (msg: Message) =>
 		})
 	).first()!.content;
 
-const handleQuestion = async (msg: Message, query: string) => {
+const handleQuestion = async (
+	msg: Message,
+	query: string,
+	deleteQuestion?: boolean
+) => {
 	const options = ['✅', '❌'];
 
 	const question = await msg.reply(query);
@@ -46,6 +50,8 @@ const handleQuestion = async (msg: Message, query: string) => {
 		},
 		{max: 1, time: 120000, errors: ['time']}
 	);
+
+	deleteQuestion && (await question.delete());
 
 	return reaction.first()!.emoji.name === options[0];
 };
@@ -84,14 +90,19 @@ const handleYoutubeLogin = async (msg: Message) => {
 };
 
 const handleYoutubeUpload = async (msg: Message, videoData: VideoData) => {
-	const canUploadYoutube = await handleQuestion(msg, 'Upload to Youtube?');
+	const canUploadYoutube = await handleQuestion(
+		msg,
+		'Upload to Youtube?',
+		true
+	);
 
 	if (!canUploadYoutube) return false;
 
 	await handleYoutubeLogin(msg);
 
+	const mainMsg = await msg.reply('Uploading to youtube');
 	const youtubeResponse = await uploadYoutube(videoData);
-	await msg.reply(`https://youtu.be/${youtubeResponse.id}`);
+	await mainMsg.edit(`https://youtu.be/${youtubeResponse.id}`);
 };
 
 const userMessageDescription = {
@@ -142,43 +153,51 @@ const handleUserMessage = {
 		const startDate = new Date();
 		startDate.setDate(startDate.getDate() - days);
 
+		const mainMsg = await msg.reply('Fetching matches');
+
 		const matches = await getMatches(startDate, new Date());
 
 		if (matches.length === 0)
-			return msg.reply('No matches found for the given date range');
+			return mainMsg.edit('No matches found for the given date range');
 
-		msg.reply(`Rendering ${matches.length} matches`);
+		mainMsg.edit(`Rendering ${matches.length} matches`);
 
 		const paths = await renderMatchResult(matches);
 
-		paths.map(async (path, k) => {
-			const videoData = {
-				title: `CSGO Match Results ${dateToString(startDate)}${
-					paths.length > 1 ? ` - ${k + 1}/${paths.length}` : ''
-				}`,
-				description: readFileSync(`${path}.txt`, 'utf8'),
-				tags: [
-					...new Set(
-						[
-							'csgo',
-							'counter',
-							'strike',
-							'counterstrike',
-							'counter-stike',
-							'match',
-							'result',
-							'hltv',
-							...matches.map((m) => m.team1.name),
-							...matches.map((m) => m.team2.name),
-							...matches.map((m) => m.tournament || ''),
-						].filter((t) => t.length > 0)
-					),
-				],
-				path: `${path}.mp4`,
-			};
+		mainMsg.edit(`Uploading ${matches.length} matches`);
 
-			await handleYoutubeUpload(msg, videoData);
-		});
+		await Promise.all(
+			paths.map(async (path, k) => {
+				const videoData = {
+					title: `CSGO Match Results ${dateToString(startDate)}${
+						paths.length > 1 ? ` - ${k + 1}/${paths.length}` : ''
+					}`,
+					description: readFileSync(`${path}.txt`, 'utf8'),
+					tags: [
+						...new Set(
+							[
+								'csgo',
+								'counter',
+								'strike',
+								'counterstrike',
+								'counter-stike',
+								'match',
+								'result',
+								'hltv',
+								...matches.map((m) => m.team1.name),
+								...matches.map((m) => m.team2.name),
+								...matches.map((m) => m.tournament || ''),
+							].filter((t) => t.length > 0)
+						),
+					],
+					path: `${path}.mp4`,
+				};
+
+				await handleYoutubeUpload(msg, videoData);
+			})
+		);
+
+		await mainMsg.delete();
 	},
 } as MessageHandler;
 
