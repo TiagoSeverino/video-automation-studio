@@ -149,6 +149,7 @@ const generateEsportVideo = async (msg: Message, game: ESportsVideo) => {
 const userMessageDescription = {
 	csgo: ['Generates video with daily csgo results', []],
 	valorant: ['Generates video with daily valorant results', []],
+	sf5: ['Generates video with daily sf5 results', []],
 	download: ['Downloads a video and reupload', ['<url>']],
 } as CommandDescription;
 
@@ -192,6 +193,9 @@ const handleUserMessage = {
 	},
 	valorant: async (_, msg) => {
 		await generateEsportVideo(msg, 'valorant');
+	},
+	sf5: async (_, msg) => {
+		await generateEsportVideo(msg, 'sf5');
 	},
 } as MessageHandler;
 
