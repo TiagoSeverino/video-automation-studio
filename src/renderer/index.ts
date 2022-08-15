@@ -4,8 +4,6 @@ import {bundle} from '@remotion/bundler';
 import {getCompositions, renderMedia} from '@remotion/renderer';
 import {v4 as uuidv4} from 'uuid';
 
-import {MatchResult} from '../utils/csgo';
-
 export const renderMatchResult = async (matches: MatchResult[]) => {
 	const compositionId = 'MatchResult';
 
