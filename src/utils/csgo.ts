@@ -1,27 +1,15 @@
 import HLTV from 'hltv';
+import {dateToString} from './date';
 
-const getResults = async (startDate: string, endDate: string) => {
-	return HLTV.getResults({
-		startDate,
-		endDate,
+export const getCSGOMatches = async (): Promise<MatchResult[]> => {
+	const date = dateToString(new Date());
+
+	const results = await HLTV.getResults({
+		startDate: date,
+		endDate: date,
 		stars: 1,
 		delayBetweenPageRequests: 3000,
 	});
-};
-
-export const dateToString = (date: Date) =>
-	`${date.getFullYear()}-${('0' + (date.getMonth() + 1).toString()).slice(
-		-2
-	)}-${('0' + date.getDate().toString()).slice(-2)}`;
-
-export const getMatches = async (
-	startDate: Date,
-	endDate: Date
-): Promise<MatchResult[]> => {
-	const results = await getResults(
-		dateToString(startDate),
-		dateToString(endDate)
-	);
 
 	return results.map((r) => {
 		return {

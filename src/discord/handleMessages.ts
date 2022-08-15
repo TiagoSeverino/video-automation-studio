@@ -4,7 +4,8 @@ import {existsSync, readFileSync, writeFileSync} from 'fs';
 import downloader from '../downloader';
 import {renderMatchResult} from '../renderer';
 import {getTwitterThread} from '../twitter';
-import {dateToString, getMatches} from '../utils/csgo';
+import {dateToString} from '../utils/date';
+import {getMatches} from '../utils/esports';
 import uploadYoutube, {
 	authenticateWithOAuthCredentials,
 	authenticateWithOAuthToken,
@@ -150,12 +151,9 @@ const handleUserMessage = {
 
 		if (isNaN(days)) return msg.reply('Invalid days');
 
-		const startDate = new Date();
-		startDate.setDate(startDate.getDate() - days);
-
 		const mainMsg = await msg.reply('Fetching matches');
 
-		const matches = await getMatches(startDate, new Date());
+		const matches = await getMatches('csgo');
 
 		if (matches.length === 0)
 			return mainMsg.edit('No matches found for the given date range');
@@ -169,9 +167,10 @@ const handleUserMessage = {
 		await Promise.all(
 			paths.map(async (path, k) => {
 				const videoData = {
-					title: `CSGO Match Results ${dateToString(startDate)}${
-						paths.length > 1 ? ` - ${k + 1}/${paths.length}` : ''
-					}`,
+					title: `CSGO Match Results ${dateToString(
+						new Date(),
+						false
+					)}${paths.length > 1 ? ` - ${k + 1}/${paths.length}` : ''}`,
 					description: readFileSync(`${path}.txt`, 'utf8'),
 					tags: [
 						...new Set(
