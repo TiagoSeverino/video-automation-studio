@@ -13,4 +13,4 @@ interface MatchResult {
 	stars: number;
 }
 
-type ESportsVideo = 'csgo' | 'valorant';
+type ESportsVideo = 'csgo' | 'valorant' | 'sf5';
