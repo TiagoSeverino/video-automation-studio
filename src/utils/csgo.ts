@@ -1,20 +1,5 @@
 import HLTV from 'hltv';
 
-export interface MatchResult {
-	team1: {
-		name: string;
-		logo: string;
-		rounds: number;
-	};
-	team2: {
-		name: string;
-		logo: string;
-		rounds: number;
-	};
-	tournament?: string;
-	stars: number;
-}
-
 const getResults = async (startDate: string, endDate: string) => {
 	return HLTV.getResults({
 		startDate,
