@@ -3,7 +3,7 @@ import {MatchResult} from './MatchResult';
 
 // Each <Composition> is an entry in the sidebar!
 const duration = 10;
-const fps = 60;
+const fps = 30;
 const durationInFrames = fps * duration;
 
 export const RemotionVideo: React.FC = () => {
