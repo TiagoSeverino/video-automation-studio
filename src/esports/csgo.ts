@@ -1,5 +1,5 @@
 import HLTV from 'hltv';
-import {dateToString} from './date';
+import {dateToString} from '../utils/date';
 
 export const getCSGOMatches = async (): Promise<MatchResult[]> => {
 	const date = dateToString(new Date());

@@ -5,7 +5,7 @@ import downloader from '../downloader';
 import {renderMatchResult} from '../renderer';
 import {getTwitterThread} from '../twitter';
 import {dateToString} from '../utils/date';
-import {getMatches, getTags, getTitle} from '../utils/esports';
+import {getMatches, getTags, getTitle} from '../esports';
 import uploadYoutube, {
 	authenticateWithOAuthCredentials,
 	authenticateWithOAuthToken,
