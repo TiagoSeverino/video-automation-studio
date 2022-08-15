@@ -12,3 +12,5 @@ interface MatchResult {
 	tournament?: string;
 	stars: number;
 }
+
+type ESportsVideo = 'csgo' | 'valorant';

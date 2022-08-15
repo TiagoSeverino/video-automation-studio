@@ -28,3 +28,14 @@ export const getCSGOMatches = async (): Promise<MatchResult[]> => {
 		};
 	});
 };
+
+export const csgoTags = [
+	'csgo',
+	'counter',
+	'strike',
+	'counterstrike',
+	'counter-stike',
+	'match',
+	'result',
+	'hltv',
+];

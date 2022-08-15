@@ -5,7 +5,7 @@ import downloader from '../downloader';
 import {renderMatchResult} from '../renderer';
 import {getTwitterThread} from '../twitter';
 import {dateToString} from '../utils/date';
-import {getMatches} from '../utils/esports';
+import {getMatches, getTags, getTitle} from '../utils/esports';
 import uploadYoutube, {
 	authenticateWithOAuthCredentials,
 	authenticateWithOAuthToken,
@@ -106,8 +106,49 @@ const handleYoutubeUpload = async (msg: Message, videoData: VideoData) => {
 	await mainMsg.edit(`https://youtu.be/${youtubeResponse.id}`);
 };
 
+const generateEsportVideo = async (msg: Message, game: ESportsVideo) => {
+	const mainMsg = await msg.reply('Fetching matches');
+
+	const matches = await getMatches(game);
+
+	if (matches.length === 0) return mainMsg.edit('No matches found!');
+
+	mainMsg.edit(`Rendering ${matches.length} matches`);
+
+	const paths = await renderMatchResult(matches);
+
+	mainMsg.edit(`Uploading ${matches.length} matches`);
+
+	await Promise.all(
+		paths.map(async (path, k) => {
+			const videoData = {
+				title: `${getTitle(game)} ${dateToString(new Date(), false)}${
+					paths.length > 1 ? ` - ${k + 1}/${paths.length}` : ''
+				}`,
+				description: readFileSync(`${path}.txt`, 'utf8'),
+				tags: [
+					...new Set(
+						[
+							...getTags(game),
+							...matches.map((m) => m.team1.name),
+							...matches.map((m) => m.team2.name),
+							...matches.map((m) => m.tournament || ''),
+						].filter((t) => t.length > 0)
+					),
+				],
+				path: `${path}.mp4`,
+			};
+
+			await handleYoutubeUpload(msg, videoData);
+		})
+	);
+
+	await mainMsg.delete();
+};
+
 const userMessageDescription = {
-	csgo: ['Renders a video from hltv results', ['<days (Default: 1)>']],
+	csgo: ['Generates video with daily csgo results', []],
+	valorant: ['Generates video with daily valorant results', []],
 	download: ['Downloads a video and reupload', ['<url>']],
 } as CommandDescription;
 
@@ -146,57 +187,11 @@ const handleUserMessage = {
 
 		msg.reply(tweet.text);
 	},
-	csgo: async ([daysStr], msg) => {
-		const days = daysStr ? parseInt(daysStr) - 1 : 0;
-
-		if (isNaN(days)) return msg.reply('Invalid days');
-
-		const mainMsg = await msg.reply('Fetching matches');
-
-		const matches = await getMatches('csgo');
-
-		if (matches.length === 0)
-			return mainMsg.edit('No matches found for the given date range');
-
-		mainMsg.edit(`Rendering ${matches.length} matches`);
-
-		const paths = await renderMatchResult(matches);
-
-		mainMsg.edit(`Uploading ${matches.length} matches`);
-
-		await Promise.all(
-			paths.map(async (path, k) => {
-				const videoData = {
-					title: `CSGO Match Results ${dateToString(
-						new Date(),
-						false
-					)}${paths.length > 1 ? ` - ${k + 1}/${paths.length}` : ''}`,
-					description: readFileSync(`${path}.txt`, 'utf8'),
-					tags: [
-						...new Set(
-							[
-								'csgo',
-								'counter',
-								'strike',
-								'counterstrike',
-								'counter-stike',
-								'match',
-								'result',
-								'hltv',
-								...matches.map((m) => m.team1.name),
-								...matches.map((m) => m.team2.name),
-								...matches.map((m) => m.tournament || ''),
-							].filter((t) => t.length > 0)
-						),
-					],
-					path: `${path}.mp4`,
-				};
-
-				await handleYoutubeUpload(msg, videoData);
-			})
-		);
-
-		await mainMsg.delete();
+	csgo: async (_, msg) => {
+		await generateEsportVideo(msg, 'csgo');
+	},
+	valorant: async (_, msg) => {
+		await generateEsportVideo(msg, 'valorant');
 	},
 } as MessageHandler;
 

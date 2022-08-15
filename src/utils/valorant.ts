@@ -94,3 +94,5 @@ export const getValorantMatches = async (): Promise<MatchResult[]> => {
 			})
 	);
 };
+
+export const valorantTags = ['valorant'];
