@@ -2,11 +2,12 @@ import HLTV from 'hltv';
 import {dateToString} from '../utils/date';
 
 export const getCSGOMatches = async (): Promise<MatchResult[]> => {
-	const date = dateToString(new Date());
+	const today = new Date();
+	const yesterday = new Date(today.getTime() - 1000 * 60 * 60 * 24);
 
 	const results = await HLTV.getResults({
-		startDate: date,
-		endDate: date,
+		startDate: dateToString(yesterday),
+		endDate: dateToString(today),
 		delayBetweenPageRequests: 3000,
 	});
 
