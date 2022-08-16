@@ -9,6 +9,7 @@ import {availableGames, getMatches, getTags, getTitle} from '../esports';
 import uploadYoutube, {
 	authenticateWithOAuthCredentials,
 	authenticateWithOAuthToken,
+	categoryIds,
 	requestYoutubeConsentUrl,
 	VideoData,
 } from '../youtube';
@@ -134,6 +135,7 @@ const generateEsportVideo = async (msg: Message, game: ESportsVideo) => {
 					),
 				],
 				path: `${path}.mp4`,
+				categoryId: categoryIds.Gaming,
 			};
 
 			await handleYoutubeUpload(msg, videoData);

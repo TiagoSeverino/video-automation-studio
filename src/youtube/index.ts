@@ -11,7 +11,12 @@ export interface VideoData {
 	description: string;
 	tags: string[];
 	thumbnail?: string;
+	categoryId: number;
 }
+
+export const categoryIds = {
+	Gaming: 20,
+};
 
 export default async function uploadYoutube(videoData: VideoData) {
 	const videoInformation = await uploadVideo(videoData);
@@ -78,7 +83,13 @@ export const authenticateWithOAuthCredentials = async (credentials: {
 	await setGlobalGoogleAuthentication(OAuthClient);
 };
 
-const uploadVideo = async ({path, title, description, tags}: VideoData) => {
+const uploadVideo = async ({
+	path,
+	title,
+	description,
+	tags,
+	categoryId,
+}: VideoData) => {
 	const requestParameters = {
 		part: ['snippet', 'status'],
 		requestBody: {
@@ -86,6 +97,9 @@ const uploadVideo = async ({path, title, description, tags}: VideoData) => {
 				title,
 				description,
 				tags,
+				categoryId,
+				defaultLanguage: 'en',
+				defaultAudioLanguage: 'en',
 			},
 			status: {
 				privacyStatus: 'public',
