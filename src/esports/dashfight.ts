@@ -42,6 +42,7 @@ export const getDashfightMatches = async (
 		)
 		.map((match) => {
 			return {
+				id: `${discipline}-${match.id}`,
 				tournament: match.stage.tournament.name,
 				event: match.stage.tournament.event.name,
 				team1: {

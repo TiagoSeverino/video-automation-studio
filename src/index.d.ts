@@ -1,4 +1,5 @@
 interface MatchResult {
+	id: string;
 	team1: {
 		name: string;
 		logo: string;

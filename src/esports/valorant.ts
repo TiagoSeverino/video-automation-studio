@@ -23,16 +23,25 @@ export const getValorantMatches = async (): Promise<MatchResult[]> => {
 			.find('a')
 			.toArray()
 			.map(async (match) => {
-				const matchPage = await axios.get(
-					`https://www.vlr.gg${$(match).attr('href')}`
-				);
-				const $$ = cheerio.load(matchPage.data);
+				const matchUrl = $(match).attr('href') || '';
 
-				const team1Logo =
-					$$('.match-header-link img').first().attr('src') || '';
+				let team1Logo =
+					'https://www.hltv.org/img/static/team/placeholder.svg';
+				let team2Logo =
+					'https://www.hltv.org/img/static/team/placeholder.svg';
 
-				const team2Logo =
-					$$('.match-header-link img').last().attr('src') || '';
+				if (matchUrl.length > 0) {
+					const matchPage = await axios.get(
+						`https://www.vlr.gg${id}`
+					);
+					const $$ = cheerio.load(matchPage.data);
+
+					team1Logo =
+						$$('.match-header-link img').first().attr('src') || '';
+
+					team2Logo =
+						$$('.match-header-link img').last().attr('src') || '';
+				}
 
 				const team1 = {
 					name: $(match)
@@ -86,6 +95,7 @@ export const getValorantMatches = async (): Promise<MatchResult[]> => {
 					.trim();
 
 				return {
+					id: `valorant-${matchUrl.split('/')[1]}`,
 					team1,
 					team2,
 					tournament,

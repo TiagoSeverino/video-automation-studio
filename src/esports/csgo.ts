@@ -7,12 +7,12 @@ export const getCSGOMatches = async (): Promise<MatchResult[]> => {
 	const results = await HLTV.getResults({
 		startDate: date,
 		endDate: date,
-		stars: 1,
 		delayBetweenPageRequests: 3000,
 	});
 
 	return results.map((r) => {
 		return {
+			id: `csgo-${r.id}`,
 			team1: {
 				name: r.team1.name,
 				logo: r.team1.logo,
