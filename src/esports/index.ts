@@ -1,3 +1,4 @@
+import MatchResult from '../database/models/MatchResult';
 import {csgoTags, getCSGOMatches} from './csgo';
 import {getDashfightMatches} from './dashfight';
 import {getValorantMatches, valorantTags} from './valorant';
@@ -18,7 +19,36 @@ export const availableGames = [
 	'mv',
 ] as ESportsVideo[];
 
-export const getMatches = (game: ESportsVideo): Promise<MatchResult[]> => {
+export const getMatches = async (
+	game: ESportsVideo
+): Promise<MatchResult[]> => {
+	const matches = await getMatch(game);
+
+	const notRendered = (
+		await Promise.all(
+			matches.map(async (match) => {
+				const rendered = await MatchResult.findOne({
+					where: {
+						matchId: match.id,
+					},
+				});
+
+				if (rendered?.id) return false;
+				else return match;
+			})
+		)
+	).filter((m) => m !== false) as MatchResult[];
+
+	await Promise.all(
+		notRendered.map(async (match) => {
+			await MatchResult.create(match);
+		})
+	);
+
+	return notRendered;
+};
+
+const getMatch = (game: ESportsVideo): Promise<MatchResult[]> => {
 	switch (game) {
 		case 'csgo':
 			return getCSGOMatches();
