@@ -14,6 +14,7 @@
 		"sourceMap": true,
 		"emitDecoratorMetadata": true,
 		"experimentalDecorators": true,
+		"strictPropertyInitialization": false
 	},
 	"files":["src/index.d.ts"],
 	"include": [
