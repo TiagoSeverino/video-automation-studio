@@ -44,9 +44,7 @@ export const getTitle = (game: ESportsVideo) => {
 			return 'CSGO Match Results';
 		case 'valorant':
 			return 'Valorant Match Results';
-		case 'sf5':
-			return 'SF5 Match Results';
 		default:
-			return 'Match Results';
+			return `${game.toUpperCase()} Match Results`;
 	}
 };
