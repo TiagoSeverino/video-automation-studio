@@ -1,17 +1,15 @@
 interface MatchResult {
 	id: string;
-	team1: {
-		name: string;
-		logo: string;
-		rounds: number;
-	};
-	team2: {
-		name: string;
-		logo: string;
-		rounds: number;
-	};
+	team1: TeamData;
+	team2: TeamData;
 	tournament?: string;
 	stars: number;
+}
+
+interface TeamData {
+	name: string;
+	logo?: string;
+	rounds: number;
 }
 
 type ESportsVideo =

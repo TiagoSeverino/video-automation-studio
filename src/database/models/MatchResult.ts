@@ -1,17 +1,15 @@
 import {Schema, model, connect} from 'mongoose';
 
+const team = {
+	name: {type: String, required: true},
+	logo: {type: String, required: false},
+	rounds: {type: Number, required: true},
+};
+
 const matchResultSchema = new Schema<MatchResult>({
 	id: {type: String, required: true},
-	team1: {
-		name: {type: String, required: true},
-		logo: {type: String, required: true},
-		rounds: {type: Number, required: true},
-	},
-	team2: {
-		name: {type: String, required: true},
-		logo: {type: String, required: true},
-		rounds: {type: Number, required: true},
-	},
+	team1: team,
+	team2: team,
 	tournament: {type: String, required: false},
 	stars: {type: Number, required: true},
 });
