@@ -37,25 +37,30 @@ export const getDashfightMatches = async (
 	return res.data.matches.items
 		.filter((m) => m.startedAt != null)
 		.map((match) => {
-			return {
-				id: `${discipline}-${match.id}`,
-				tournament: match.stage.tournament.name,
-				event: match.stage.tournament.event.name,
-				team1: {
-					name: match.participants[0].player.nickname,
-					logo: fixLogoUrl(
-						match.participants[0].player.image?.original || ''
-					),
-					rounds: match.score[0],
-				},
-				team2: {
-					name: match.participants[1].player.nickname,
-					logo: fixLogoUrl(
-						match.participants[1].player.image?.original || ''
-					),
-					rounds: match.score[1],
-				},
-				stars: 0,
-			};
-		});
+			try {
+				return {
+					id: `${discipline}-${match.id}`,
+					tournament: match.stage.tournament.name,
+					event: match.stage.tournament.event.name,
+					team1: {
+						name: match.participants[0].player.nickname,
+						logo: fixLogoUrl(
+							match.participants[0].player.image?.original || ''
+						),
+						rounds: match.score[0],
+					},
+					team2: {
+						name: match.participants[1].player.nickname,
+						logo: fixLogoUrl(
+							match.participants[1].player.image?.original || ''
+						),
+						rounds: match.score[1],
+					},
+					stars: 0,
+				};
+			} catch {
+				return null;
+			}
+		})
+		.filter((m) => m != null) as MatchResult[];
 };
