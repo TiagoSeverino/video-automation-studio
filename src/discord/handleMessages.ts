@@ -125,7 +125,12 @@ const generateEsportVideo = async (msg: Message, game: ESportsVideo) => {
 
 			const videoData = {
 				title: `${getTitle(game)} ${dateToString(new Date(), false)}`,
-				description: readFileSync(`${path}.txt`, 'utf8'),
+				description: chunk
+					.map(
+						(m) =>
+							`${m.team1.name} ${m.team1.rounds} - ${m.team2.rounds} ${m.team2.name} at ${m.tournament}`
+					)
+					.join('\n'),
 				tags: [
 					...new Set(
 						[
@@ -136,7 +141,7 @@ const generateEsportVideo = async (msg: Message, game: ESportsVideo) => {
 						].filter((t) => t.length > 0)
 					),
 				],
-				path: `${path}.mp4`,
+				path,
 				categoryId: categoryIds.Gaming,
 			};
 
