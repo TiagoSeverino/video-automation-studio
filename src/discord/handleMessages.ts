@@ -13,7 +13,7 @@ import uploadYoutube, {
 	categoryIds,
 	requestYoutubeConsentUrl,
 	VideoData,
-} from '../youtube';
+} from '../google/youtube';
 import client from './discord';
 import getChunks from '../utils/getChunks';
 import getYoutubeID from '../utils/getYoutubeID';
