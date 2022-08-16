@@ -23,12 +23,10 @@ export default async function uploadYoutube(videoData: VideoData) {
 }
 
 const createOAuthClient = () => {
-	const credentials = require('../../youtube-credentials.json');
-
 	const OAuthClient = new OAuth2(
-		credentials.installed.client_id,
-		credentials.installed.client_secret,
-		credentials.installed.redirect_uris[0]
+		process.env.GOOGLE_CLIENT_ID,
+		process.env.GOOGLE_CLIENT_SECRET,
+		process.env.GOOGLE_REDIRECT_URI
 	);
 
 	return OAuthClient;

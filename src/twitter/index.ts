@@ -1,6 +1,6 @@
 import {TwitterApi} from 'twitter-api-v2';
 
-const twitterClient = new TwitterApi(process.env.TWITTER_TOKEN).readOnly.v2;
+const twitterClient = new TwitterApi(process.env.TWITTER_TOKEN!).readOnly.v2;
 
 export const getTwitterThread = async (tweetId: string) => {
 	const tweet = (
