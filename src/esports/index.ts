@@ -29,7 +29,7 @@ export const getMatches = async (
 			matches.map(async (match) => {
 				const rendered = await MatchResult.findOne({
 					where: {
-						matchId: match.id,
+						id: match.id,
 					},
 				});
 
