@@ -11,7 +11,9 @@
 		"skipLibCheck": true,
 		"forceConsistentCasingInFileNames": true,
 		"resolveJsonModule": true,
-		"sourceMap": true
+		"sourceMap": true,
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
 	},
 	"files":["src/index.d.ts"],
 	"include": [
