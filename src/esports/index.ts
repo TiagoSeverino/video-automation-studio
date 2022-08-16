@@ -28,9 +28,7 @@ export const getMatches = async (
 		await Promise.all(
 			matches.map(async (match) => {
 				const rendered = await MatchResult.findOne({
-					where: {
-						id: match.id,
-					},
+					id: match.id,
 				});
 
 				if (rendered?.id) return false;
