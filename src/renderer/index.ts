@@ -23,23 +23,13 @@ export const renderMatchResult = async (matches: MatchResult[]) => {
 		throw new Error(`No composition with the ID ${compositionId} found.
   Review "${entry}" for the correct ID.`);
 
-	const outputLocation = `out/${compositionId}-${uuidv4()}`;
-
-	writeFileSync(
-		`${outputLocation}.txt`,
-		matches
-			.map(
-				(m) =>
-					`${m.team1.name} ${m.team1.rounds} - ${m.team2.rounds} ${m.team2.name} at ${m.tournament}\n`
-			)
-			.join('')
-	);
+	const outputLocation = `out/${compositionId}-${uuidv4()}.mp4`;
 
 	await renderMedia({
 		composition,
 		serveUrl: bundleLocation,
 		codec: 'h264',
-		outputLocation: `${outputLocation}.mp4`,
+		outputLocation,
 		inputProps: {
 			matches,
 		},
