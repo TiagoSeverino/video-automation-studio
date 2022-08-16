@@ -13,6 +13,7 @@ import uploadYoutube, {
 	VideoData,
 } from '../youtube';
 import client from './discord';
+import getChunks from '../utils/getChunks';
 
 interface MessageHandler {
 	[cmd: string]: (args: string[], message: Message) => Promise<any> | any;
@@ -115,24 +116,20 @@ const generateEsportVideo = async (msg: Message, game: ESportsVideo) => {
 
 	mainMsg.edit(`Rendering ${matches.length} matches`);
 
-	const paths = await renderMatchResult(matches);
-
-	mainMsg.edit(`Uploading ${matches.length} matches`);
-
 	await Promise.all(
-		paths.map(async (path, k) => {
+		getChunks(matches, 5).map(async (chunk) => {
+			const path = await renderMatchResult(chunk);
+
 			const videoData = {
-				title: `${getTitle(game)} ${dateToString(new Date(), false)}${
-					paths.length > 1 ? ` - ${k + 1}/${paths.length}` : ''
-				}`,
+				title: `${getTitle(game)} ${dateToString(new Date(), false)}`,
 				description: readFileSync(`${path}.txt`, 'utf8'),
 				tags: [
 					...new Set(
 						[
 							...getTags(game),
-							...matches.map((m) => m.team1.name),
-							...matches.map((m) => m.team2.name),
-							...matches.map((m) => m.tournament || ''),
+							...chunk.map((m) => m.team1.name),
+							...chunk.map((m) => m.team2.name),
+							...chunk.map((m) => m.tournament || ''),
 						].filter((t) => t.length > 0)
 					),
 				],
