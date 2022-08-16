@@ -171,6 +171,7 @@ const handleUserMessage = {
 		await handleYoutubeUpload(msg, {
 			path,
 			...videoData,
+			categoryId: categoryIds.Gaming,
 		});
 	},
 	tt: async ([url], msg) => {
