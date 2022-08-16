@@ -1,5 +1,6 @@
 import {Message} from 'discord.js';
 import {existsSync, readFileSync, writeFileSync} from 'fs';
+import {getSubtitles} from 'youtube-captions-scraper';
 
 import downloader from '../downloader';
 import {renderMatchResult} from '../renderer';
@@ -15,6 +16,7 @@ import uploadYoutube, {
 } from '../youtube';
 import client from './discord';
 import getChunks from '../utils/getChunks';
+import getYoutubeID from '../utils/getYoutubeID';
 
 interface MessageHandler {
 	[cmd: string]: (args: string[], message: Message) => Promise<any> | any;
@@ -184,6 +186,25 @@ const handleUserMessage = {
 		if (!tweet) return msg.reply('Invalid tweet url. Try again.');
 
 		msg.reply(tweet.text);
+	},
+	ebook: async ([url], msg) => {
+		const videoID = getYoutubeID(url);
+
+		if (!videoID) return msg.reply('Invalid video URL');
+
+		//const path = await downloader(url, videoID);
+
+		const subtitles = (await getSubtitles({
+			videoID,
+		})) as {
+			start: Number;
+			dur: Number;
+			text: String;
+		}[];
+
+		const message = subtitles.map((subtitle) => subtitle.text).join(' ');
+
+		console.log(message);
 	},
 } as MessageHandler;
 

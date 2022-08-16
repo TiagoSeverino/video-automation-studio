@@ -3,9 +3,9 @@ import youtubedl from 'youtube-dl';
 import {v4 as uuidv4} from 'uuid';
 import {join} from 'path';
 
-export default async (url: string) => {
+export default async (url: string, filename = uuidv4()) => {
 	const path = join(__dirname, '..', '..', 'out');
-	const filepath = join(path, `${uuidv4()}.mp4`);
+	const filepath = join(path, `${filename}.mp4`);
 	const video = youtubedl(url, [], {cwd: path});
 	const stream = createWriteStream(filepath);
 
