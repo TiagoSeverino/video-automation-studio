@@ -5,6 +5,9 @@ import {getCompositions, renderMedia} from '@remotion/renderer';
 import {v4 as uuidv4} from 'uuid';
 
 export const renderMatchResult = async (matches: MatchResult[]) => {
+	if (matches.length == 0 || matches.length > 5)
+		throw new Error('Limit of 5 Matches');
+
 	const compositionId = 'MatchResult';
 
 	const entry = './src/index.tsx';
@@ -20,43 +23,27 @@ export const renderMatchResult = async (matches: MatchResult[]) => {
 		throw new Error(`No composition with the ID ${compositionId} found.
   Review "${entry}" for the correct ID.`);
 
-	const chunkSize = 5;
-	const totalParts = Math.ceil(matches.length / chunkSize);
+	const outputLocation = `out/${compositionId}-${uuidv4()}`;
 
-	if (matches.length > 0) {
-		const chunks = [];
-		for (let i = 0; i < matches.length; i += chunkSize) {
-			chunks.push(matches.slice(i, i + chunkSize));
-		}
+	writeFileSync(
+		`${outputLocation}.txt`,
+		matches
+			.map(
+				(m) =>
+					`${m.team1.name} ${m.team1.rounds} - ${m.team2.rounds} ${m.team2.name} at ${m.tournament}\n`
+			)
+			.join('')
+	);
 
-		return await Promise.all(
-			chunks.map(async (chunk, k) => {
-				const outputLocation = `out/${compositionId}-${uuidv4()}-${
-					k + 1
-				}-of-${totalParts}`;
+	await renderMedia({
+		composition,
+		serveUrl: bundleLocation,
+		codec: 'h264',
+		outputLocation: `${outputLocation}.mp4`,
+		inputProps: {
+			matches,
+		},
+	});
 
-				writeFileSync(
-					`${outputLocation}.txt`,
-					chunk
-						.map(
-							(m) =>
-								`${m.team1.name} ${m.team1.rounds} - ${m.team2.rounds} ${m.team2.name} at ${m.tournament}\n`
-						)
-						.join('')
-				);
-
-				await renderMedia({
-					composition,
-					serveUrl: bundleLocation,
-					codec: 'h264',
-					outputLocation: `${outputLocation}.mp4`,
-					inputProps: {
-						matches: chunk,
-					},
-				});
-
-				return outputLocation;
-			})
-		);
-	} else return [];
+	return outputLocation;
 };
