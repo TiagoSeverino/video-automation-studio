@@ -35,11 +35,7 @@ export const getDashfightMatches = async (
 	).data) as DashfightApiResponse;
 
 	return res.data.matches.items
-		.filter(
-			(m) =>
-				m.startedAt != null &&
-				m.startedAt.startsWith(dateToString(new Date()))
-		)
+		.filter((m) => m.startedAt != null)
 		.map((match) => {
 			return {
 				id: `${discipline}-${match.id}`,
