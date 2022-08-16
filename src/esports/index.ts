@@ -1,5 +1,5 @@
 import {csgoTags, getCSGOMatches} from './csgo';
-import {getSF5Matches} from './sf5';
+import {getDashfightMatches} from './dashfight';
 import {getValorantMatches, valorantTags} from './valorant';
 
 export const getMatches = (game: ESportsVideo): Promise<MatchResult[]> => {
@@ -8,8 +8,20 @@ export const getMatches = (game: ESportsVideo): Promise<MatchResult[]> => {
 			return getCSGOMatches();
 		case 'valorant':
 			return getValorantMatches();
+
+		//Dashfight
+		case 'ssbu':
+		case 'tekken7':
 		case 'sf5':
-			return getSF5Matches();
+		case 'mk11':
+		case 'dbfz':
+		case 'ggst':
+		case 'sc6':
+		case 'bh':
+		case 'skullgirls':
+		case 'ki':
+		case 'mv':
+			return getDashfightMatches(game);
 		default:
 			return Promise.reject(new Error('Invalid game'));
 	}

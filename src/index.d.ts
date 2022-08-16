@@ -13,4 +13,17 @@ interface MatchResult {
 	stars: number;
 }
 
-type ESportsVideo = 'csgo' | 'valorant' | 'sf5';
+type ESportsVideo =
+	| 'csgo'
+	| 'valorant'
+	| 'ssbu'
+	| 'tekken7'
+	| 'sf5'
+	| 'mk11'
+	| 'dbfz'
+	| 'ggst'
+	| 'sc6'
+	| 'bh'
+	| 'skullgirls'
+	| 'ki'
+	| 'mv';
