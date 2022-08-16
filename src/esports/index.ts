@@ -2,6 +2,22 @@ import {csgoTags, getCSGOMatches} from './csgo';
 import {getDashfightMatches} from './dashfight';
 import {getValorantMatches, valorantTags} from './valorant';
 
+export const availableGames = [
+	'csgo',
+	'valorant',
+	'ssbu',
+	'tekken7',
+	'sf5',
+	'mk11',
+	'dbfz',
+	'ggst',
+	'sc6',
+	'bh',
+	'skullgirls',
+	'ki',
+	'mv',
+] as ESportsVideo[];
+
 export const getMatches = (game: ESportsVideo): Promise<MatchResult[]> => {
 	switch (game) {
 		case 'csgo':

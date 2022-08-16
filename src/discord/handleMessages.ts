@@ -5,7 +5,7 @@ import downloader from '../downloader';
 import {renderMatchResult} from '../renderer';
 import {getTwitterThread} from '../twitter';
 import {dateToString} from '../utils/date';
-import {getMatches, getTags, getTitle} from '../esports';
+import {availableGames, getMatches, getTags, getTitle} from '../esports';
 import uploadYoutube, {
 	authenticateWithOAuthCredentials,
 	authenticateWithOAuthToken,
@@ -147,9 +147,6 @@ const generateEsportVideo = async (msg: Message, game: ESportsVideo) => {
 };
 
 const userMessageDescription = {
-	csgo: ['Generates video with daily csgo results', []],
-	valorant: ['Generates video with daily valorant results', []],
-	sf5: ['Generates video with daily sf5 results', []],
 	download: ['Downloads a video and reupload', ['<url>']],
 } as CommandDescription;
 
@@ -188,16 +185,16 @@ const handleUserMessage = {
 
 		msg.reply(tweet.text);
 	},
-	csgo: async (_, msg) => {
-		await generateEsportVideo(msg, 'csgo');
-	},
-	valorant: async (_, msg) => {
-		await generateEsportVideo(msg, 'valorant');
-	},
-	sf5: async (_, msg) => {
-		await generateEsportVideo(msg, 'sf5');
-	},
 } as MessageHandler;
+
+availableGames.map((game) => {
+	handleUserMessage[game] = async (_, msg) =>
+		await generateEsportVideo(msg, game);
+	userMessageDescription[game] = [
+		`Generates video with daily ${game} results`,
+		[],
+	];
+});
 
 client.on('message', async (msg) => {
 	if (!msg.content.startsWith('!')) return;
