@@ -1,5 +1,4 @@
 import {Message} from 'discord.js';
-import {existsSync, readFileSync, writeFileSync} from 'fs';
 import {getSubtitles} from 'youtube-captions-scraper';
 
 import downloader from '../apis/downloader';
@@ -15,6 +14,7 @@ import getYoutubeID from '../utils/getYoutubeID';
 import {getQuote} from '../apis/quotes';
 import {searchImages} from '../apis/google/search';
 import {logError} from '../apis/log';
+import YoutubeCredentials from '../database/models/YoutubeCredentials';
 
 interface MessageHandler {
 	[cmd: string]: (args: string[], message: Message) => Promise<any> | any;
@@ -73,22 +73,17 @@ const promptVideoData = async (msg: Message) => {
 };
 
 const handleYoutubeLogin = async (msg: Message) => {
-	if (!existsSync(`${msg.author.id}.youtube.json`)) {
+	const youtubeCredentials = await YoutubeCredentials.findOne();
+	if (!youtubeCredentials) {
 		const youtubeConsentUrl = requestYoutubeConsentUrl();
 		await msg.reply(`Login to Youtube: ${youtubeConsentUrl}`);
 
 		const youtubeToken = await waitReply(msg);
 
 		const credentials = await authenticateWithOAuthToken(youtubeToken);
-		writeFileSync(
-			`${msg.author.id}.youtube.json`,
-			JSON.stringify(credentials)
-		);
+		await YoutubeCredentials.create(credentials);
 	} else {
-		const credentials = JSON.parse(
-			readFileSync(`${msg.author.id}.youtube.json`, 'utf8')
-		);
-		await authenticateWithOAuthCredentials(credentials);
+		await authenticateWithOAuthCredentials(youtubeCredentials);
 	}
 };
 
