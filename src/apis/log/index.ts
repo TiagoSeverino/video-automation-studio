@@ -4,9 +4,11 @@ const log = (message: string) => {
 	console.log(message);
 
 	process.env.WEBHOOK_URL &&
-		axios.post(process.env.WEBHOOK_URL, {
-			content: message,
-		});
+		axios
+			.post(process.env.WEBHOOK_URL, {
+				content: message,
+			})
+			.catch(console.error);
 };
 
 export const logError = (message: string) => {
