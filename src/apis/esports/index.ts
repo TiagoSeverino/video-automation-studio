@@ -19,34 +19,7 @@ export const availableESports = [
 	'mv',
 ] as ESportsVideo[];
 
-export const getMatches = async (
-	game: ESportsVideo
-): Promise<MatchResult[]> => {
-	const matches = await getMatch(game);
-
-	const notRendered = (
-		await Promise.all(
-			matches.map(async (match) => {
-				const rendered = await MatchResult.findOne({
-					id: match.id,
-				});
-
-				if (rendered?.id) return false;
-				else return match;
-			})
-		)
-	).filter((m) => m !== false) as MatchResult[];
-
-	await Promise.all(
-		notRendered.map(async (match) => {
-			await MatchResult.create(match);
-		})
-	);
-
-	return notRendered;
-};
-
-const getMatch = (game: ESportsVideo): Promise<MatchResult[]> => {
+export const getMatches = (game: ESportsVideo): Promise<MatchResult[]> => {
 	switch (game) {
 		case 'csgo':
 			return getCSGOMatches();
