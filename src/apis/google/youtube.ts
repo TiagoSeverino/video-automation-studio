@@ -33,18 +33,18 @@ export default async function uploadYoutube(
 	return videoData;
 }
 
-const createOAuthClient = () => {
+const createOAuthClient = (tokens: YoutubeOAuthToken) => {
 	const OAuthClient = new OAuth2(
-		process.env.GOOGLE_CLIENT_ID,
-		process.env.GOOGLE_CLIENT_SECRET,
+		tokens.client_id,
+		tokens.client_secret,
 		process.env.GOOGLE_REDIRECT_URI
 	);
 
 	return OAuthClient;
 };
 
-export const requestYoutubeConsentUrl = () =>
-	createOAuthClient().generateAuthUrl({
+export const requestYoutubeConsentUrl = (oauthToken: YoutubeOAuthToken) =>
+	createOAuthClient(oauthToken).generateAuthUrl({
 		scope: ['https://www.googleapis.com/auth/youtube'],
 	});
 
@@ -68,19 +68,26 @@ const setGlobalGoogleAuthentication = (OAuthClient: OAuth2Client) => {
 	});
 };
 
-export const authenticateWithOAuthToken = async (token: string) => {
-	const OAuthClient = await createOAuthClient();
+export const authenticateWithOAuthToken = async (
+	oauthToken: YoutubeOAuthToken,
+	accessToken: string
+) => {
+	const OAuthClient = await createOAuthClient(oauthToken);
 
-	const credentials = await requestGoogleForAccessTokens(OAuthClient, token);
+	const credentials = await requestGoogleForAccessTokens(
+		OAuthClient,
+		accessToken
+	);
 	await setGlobalGoogleAuthentication(OAuthClient);
 
 	return credentials;
 };
 
 export const authenticateWithOAuthCredentials = async (
+	oauthToken: YoutubeOAuthToken,
 	credentials: YoutubeCredentials
 ) => {
-	const OAuthClient = createOAuthClient();
+	const OAuthClient = createOAuthClient(oauthToken);
 	OAuthClient.setCredentials(credentials);
 	await setGlobalGoogleAuthentication(OAuthClient);
 };

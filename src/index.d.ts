@@ -50,3 +50,8 @@ interface YoutubeCredentials {
 	token_type: string;
 	expiry_date: number;
 }
+
+interface YoutubeOAuthToken {
+	client_id: string;
+	client_secret: string;
+}
