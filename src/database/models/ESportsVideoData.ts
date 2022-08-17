@@ -6,7 +6,7 @@ const ESportsVideoDataSchema = new Schema<ESportsVideoData>(
 		title: {type: String, required: true},
 		description: {type: String, required: true},
 		tags: [{type: String, required: true}],
-		thumbnail: {type: String, required: true},
+		thumbnail: {type: String, required: false},
 		categoryId: {type: String, required: true},
 		platforms: {
 			youtube: {

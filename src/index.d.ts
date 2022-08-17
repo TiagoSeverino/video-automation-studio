@@ -24,6 +24,11 @@ interface MatchResult {
 	stars: number;
 }
 
+interface StoreMatchResult extends MatchResult {
+	game: ESportsVideo;
+	videoId?: string;
+}
+
 interface TeamData {
 	name: string;
 	logo?: string;
