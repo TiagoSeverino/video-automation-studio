@@ -3,12 +3,10 @@ import {bundle} from '@remotion/bundler';
 import {getCompositions, renderMedia} from '@remotion/renderer';
 import {v4 as uuidv4} from 'uuid';
 
-export const renderMatchResult = async (matches: MatchResult[]) => {
-	if (matches.length == 0 || matches.length > 5)
-		throw new Error('Limit of 5 Matches');
-
-	const compositionId = 'MatchResult';
-
+export const renderComposition = async (
+	compositionId: VideoCompositions,
+	inputProps: object
+) => {
 	const entry = './src/index.tsx';
 	const bundleLocation = await bundle(path.resolve(entry), () => undefined, {
 		webpackOverride: (config) => config,
@@ -29,9 +27,7 @@ export const renderMatchResult = async (matches: MatchResult[]) => {
 		serveUrl: bundleLocation,
 		codec: 'h264',
 		outputLocation,
-		inputProps: {
-			matches,
-		},
+		inputProps,
 	});
 
 	return outputLocation;

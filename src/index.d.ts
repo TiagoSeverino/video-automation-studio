@@ -40,3 +40,5 @@ type ESportsVideo =
 	| 'skullgirls'
 	| 'ki'
 	| 'mv';
+
+type VideoCompositions = 'MatchResult';

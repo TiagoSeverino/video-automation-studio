@@ -1,6 +1,6 @@
 import {getTags, getTitle} from '../apis/esports';
 import {categoryIds} from '../google/youtube';
-import {renderMatchResult} from '../renderer';
+import {renderComposition} from '../renderer';
 import {dateToString} from '../utils/date';
 import getChunks from '../utils/getChunks';
 
@@ -13,7 +13,7 @@ export default async (
 	return Promise.all(
 		chunks.map(async (chunk, k) => {
 			const suffix = chunks.length > 1 ? `#${k + 1}` : '';
-			const path = await renderMatchResult(chunk);
+			const path = await renderComposition('MatchResult', chunk);
 
 			return {
 				title: `${getTitle(game)} ${dateToString(
