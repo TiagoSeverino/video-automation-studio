@@ -13,7 +13,9 @@ export default async (
 	return Promise.all(
 		chunks.map(async (chunk, k) => {
 			const suffix = chunks.length > 1 ? `#${k + 1}` : '';
-			const path = await renderComposition('MatchResult', chunk);
+			const path = await renderComposition('MatchResult', {
+				matches: chunk,
+			});
 
 			return {
 				title: `${getTitle(game)} ${dateToString(
