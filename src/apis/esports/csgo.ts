@@ -1,5 +1,5 @@
 import HLTV from 'hltv';
-import {dateToString} from '../utils/date';
+import {dateToString} from '../../utils/date';
 
 const fixLogoUrl = (url: string) =>
 	url.startsWith('/') ? `https://www.hltv.org${url}` : url;

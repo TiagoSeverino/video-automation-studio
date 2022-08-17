@@ -3,7 +3,7 @@ import {existsSync, readFileSync, writeFileSync} from 'fs';
 import {getSubtitles} from 'youtube-captions-scraper';
 
 import downloader from '../downloader';
-import {getTwitterThread} from '../twitter';
+import {getTwitterThread} from '../apis/twitter';
 import uploadYoutube, {
 	authenticateWithOAuthCredentials,
 	authenticateWithOAuthToken,
@@ -13,7 +13,7 @@ import uploadYoutube, {
 } from '../google/youtube';
 import client from './discord';
 import getYoutubeID from '../utils/getYoutubeID';
-import {getQuote} from '../quotes';
+import {getQuote} from '../apis/quotes';
 import {searchImages} from '../google/search';
 
 interface MessageHandler {

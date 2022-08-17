@@ -1,5 +1,5 @@
 import {readFileSync} from 'fs';
-import {availableESports, getMatches} from '../esports';
+import {availableESports, getMatches} from '../apis/esports';
 import handleYoutubeUpload from '../services/handleYoutubeUpload';
 import renderESportsResults from '../services/renderESportsResults';
 

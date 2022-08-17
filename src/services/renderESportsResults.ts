@@ -1,4 +1,4 @@
-import {getTags, getTitle} from '../esports';
+import {getTags, getTitle} from '../apis/esports';
 import {categoryIds} from '../google/youtube';
 import {renderMatchResult} from '../renderer';
 import {dateToString} from '../utils/date';

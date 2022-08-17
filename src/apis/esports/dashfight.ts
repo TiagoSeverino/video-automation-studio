@@ -1,5 +1,4 @@
 import axios from 'axios';
-import {dateToString} from '../utils/date';
 import {DashfightApiResponse} from './dashfight.d';
 
 const fixLogoUrl = (url: string) =>

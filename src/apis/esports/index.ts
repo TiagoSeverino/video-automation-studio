@@ -1,4 +1,4 @@
-import MatchResult from '../database/models/MatchResult';
+import MatchResult from '../../database/models/MatchResult';
 import {csgoTags, getCSGOMatches} from './csgo';
 import {getDashfightMatches} from './dashfight';
 import {getValorantMatches, valorantTags} from './valorant';
