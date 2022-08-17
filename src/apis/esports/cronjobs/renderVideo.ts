@@ -1,6 +1,7 @@
 import {availableESports, updateMatchResults} from '..';
 import ESportsVideoData from '../../../database/models/ESportsVideoData';
 import MatchResult from '../../../database/models/MatchResult';
+import log from '../../log';
 import render from '../Video/render';
 
 export default async () =>
@@ -11,7 +12,10 @@ export default async () =>
 			videoId: {$exists: false},
 		});
 
+		if (matchesNotRendered.length === 0) return;
+
 		//Render matches
+		log(`Rendering ${matchesNotRendered.length} matches for ${game}`);
 		const videosData = await render(game, matchesNotRendered);
 
 		//Save VideoData to database
