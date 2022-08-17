@@ -1,3 +1,17 @@
+interface VideoData {
+	path: string;
+	title: string;
+	description: string;
+	tags: string[];
+	thumbnail?: string;
+	categoryId: number;
+	platforms?: {
+		youtube?: {
+			id: string;
+		};
+	};
+}
+
 interface MatchResult {
 	id: string;
 	team1: TeamData;

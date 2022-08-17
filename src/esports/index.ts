@@ -3,7 +3,7 @@ import {csgoTags, getCSGOMatches} from './csgo';
 import {getDashfightMatches} from './dashfight';
 import {getValorantMatches, valorantTags} from './valorant';
 
-export const availableGames = [
+export const availableESports = [
 	'csgo',
 	'valorant',
 	'ssbu',

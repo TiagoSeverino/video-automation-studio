@@ -1,30 +1,21 @@
-import {readFileSync} from 'fs';
-import {availableGames, getMatches, getTags, getTitle} from '../esports';
+import {getTags, getTitle} from '../esports';
 import {categoryIds} from '../google/youtube';
 import {renderMatchResult} from '../renderer';
 import {dateToString} from '../utils/date';
 import getChunks from '../utils/getChunks';
-import handleYoutubeUpload from './handleYoutubeUpload';
 
-export default async () => {
-	availableGames.map(async (game) => {
-		const matches = await getMatches(game);
+export default async (
+	game: ESportsVideo,
+	matches: MatchResult[]
+): Promise<VideoData[]> => {
+	const chunks = getChunks(matches, 5);
 
-		if (matches.length < 1) return;
-
-		console.log(`${matches.length} matches found for ${game}`);
-
-		const credentials = JSON.parse(
-			readFileSync(`credentials.youtube.json`, 'utf8')
-		);
-
-		const chunks = getChunks(matches, 5);
-
+	return Promise.all(
 		chunks.map(async (chunk, k) => {
 			const suffix = chunks.length > 1 ? `#${k + 1}` : '';
 			const path = await renderMatchResult(chunk);
 
-			const videoData = {
+			return {
 				title: `${getTitle(game)} ${dateToString(
 					new Date(),
 					false
@@ -47,15 +38,7 @@ export default async () => {
 				],
 				path,
 				categoryId: categoryIds.Gaming,
-			};
-
-			const youtubeResponse = await handleYoutubeUpload(
-				videoData,
-				credentials
-			);
-			console.log(
-				`${videoData.title} - https://youtu.be/${youtubeResponse.id}`
-			);
-		});
-	});
+			} as VideoData;
+		})
+	);
 };

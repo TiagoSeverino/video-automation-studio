@@ -5,15 +5,6 @@ const youtube = google.youtube({version: 'v3'});
 const OAuth2 = google.auth.OAuth2;
 const fs = require('fs');
 
-export interface VideoData {
-	path: string;
-	title: string;
-	description: string;
-	tags: string[];
-	thumbnail?: string;
-	categoryId: number;
-}
-
 export const categoryIds = {
 	Gaming: 20,
 };

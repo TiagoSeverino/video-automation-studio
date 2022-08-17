@@ -1,7 +1,7 @@
 import cron from 'node-cron';
-import fetchESportsResultsAndUpload from '../services/fetchESportsResultsAndUpload';
+import esportsManager from './esportsManager';
 
 cron.schedule('0 */8 * * *', () => {
 	console.log(new Date().toUTCString());
-	fetchESportsResultsAndUpload();
+	esportsManager();
 });
