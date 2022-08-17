@@ -1,14 +1,7 @@
 import cron from 'node-cron';
-import {availableGames, getMatches} from '../esports';
+import fetchESportsResultsAndUpload from '../services/fetchESportsResultsAndUpload';
 
-cron.schedule('*/15 * * * *', () => {
+cron.schedule('0 */8 * * *', () => {
 	console.log(new Date().toUTCString());
-
-	availableGames.map(async (game) => {
-		const matches = await getMatches(game);
-
-		if (matches.length > 0) {
-			console.log(`${matches.length} matches found for ${game}`);
-		}
-	});
+	fetchESportsResultsAndUpload();
 });
