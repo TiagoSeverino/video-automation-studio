@@ -1,9 +1,9 @@
+import {createReadStream} from 'fs';
 import {OAuth2Client} from 'google-auth-library';
 import {google} from 'googleapis';
 
 const youtube = google.youtube({version: 'v3'});
 const OAuth2 = google.auth.OAuth2;
-const fs = require('fs');
 
 export const categoryIds = {
 	Gaming: '20',
@@ -116,7 +116,7 @@ const uploadVideo = async ({
 			},
 		},
 		media: {
-			body: fs.createReadStream(path),
+			body: createReadStream(path),
 		},
 	};
 	const youtubeResponse = await youtube.videos.insert(requestParameters);
@@ -129,7 +129,7 @@ const uploadThumbnail = async (videoId: string, thumnailPath: string) => {
 		videoId: videoId,
 		media: {
 			mimeType: 'image/jpeg',
-			body: fs.createReadStream(thumnailPath),
+			body: createReadStream(thumnailPath),
 		},
 	};
 
