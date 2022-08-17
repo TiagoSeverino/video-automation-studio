@@ -1,3 +1,4 @@
+import log from '../apis/log';
 import YoutubeCredential from '../database/models/YoutubeCredential';
 
 export default async (): Promise<YoutubeCredential | undefined> => {
