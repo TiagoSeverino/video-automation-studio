@@ -1,7 +1,18 @@
-import cron from 'node-cron';
-import esportsManager from './esportsManager';
+import {schedule} from 'node-cron';
+import esportsJobs from '../apis/esports/cronjobs';
+import {logError} from '../apis/log';
 
-cron.schedule('0 */8 * * *', () => {
-	console.log(new Date().toUTCString());
-	esportsManager();
+const jobs = [] as CronJob[];
+
+jobs.push(...esportsJobs);
+
+jobs.map(({cron, job, name}) => {
+	schedule(cron, async () => {
+		try {
+			await job();
+		} catch (error) {
+			console.error(error);
+			logError(`Error in ${name} cronjob`);
+		}
+	});
 });

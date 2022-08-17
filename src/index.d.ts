@@ -68,3 +68,9 @@ interface YoutubeOAuthToken {
 interface YoutubeCredentialStorage extends YoutubeOAuthToken {
 	tokens: YoutubeCrential[];
 }
+
+interface CronJob {
+	name: string;
+	cron: string;
+	job: () => any;
+}
