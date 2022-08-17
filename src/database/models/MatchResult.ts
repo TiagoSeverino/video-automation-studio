@@ -1,4 +1,4 @@
-import {Schema, model, connect} from 'mongoose';
+import {Schema, model} from 'mongoose';
 
 const team = {
 	name: {type: String, required: true},
