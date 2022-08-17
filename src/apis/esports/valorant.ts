@@ -4,7 +4,7 @@ import * as cheerio from 'cheerio';
 const fixLogoUrl = (url: string) =>
 	url.startsWith('//') ? `https:${url}` : url;
 
-export const getValorantMatches = async (): Promise<MatchResult[]> => {
+export default async (): Promise<MatchResult[]> => {
 	const res = await axios.get('https://www.vlr.gg/matches/results');
 	const $ = cheerio.load(res.data);
 

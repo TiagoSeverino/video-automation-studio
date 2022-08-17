@@ -4,9 +4,7 @@ import {DashfightApiResponse} from './dashfight.d';
 const fixLogoUrl = (url: string) =>
 	url.startsWith('/') ? `https://dashfight.com${url}` : url;
 
-export const getDashfightMatches = async (
-	discipline: string
-): Promise<MatchResult[]> => {
+export default async (discipline: string): Promise<MatchResult[]> => {
 	const res = (await (
 		await axios.post('https://api.dashfight.com/', {
 			operationName: 'matches',

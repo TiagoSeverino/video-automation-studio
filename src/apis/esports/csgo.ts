@@ -4,7 +4,7 @@ import {dateToString} from '../../utils/date';
 const fixLogoUrl = (url: string) =>
 	url.startsWith('/') ? `https://www.hltv.org${url}` : url;
 
-export const getCSGOMatches = async (): Promise<MatchResult[]> => {
+export default async (): Promise<MatchResult[]> => {
 	const today = new Date();
 	const yesterday = new Date(today.getTime() - 1000 * 60 * 60 * 24);
 
