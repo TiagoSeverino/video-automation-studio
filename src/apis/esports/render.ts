@@ -1,5 +1,5 @@
 import {getTags, getTitle} from '.';
-import {categoryIds} from '../../google/youtube';
+import {categoryIds} from '../google/youtube';
 import renderComposition from '../../utils/renderComposition';
 import {dateToString} from '../../utils/date';
 import getChunks from '../../utils/getChunks';

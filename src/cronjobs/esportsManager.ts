@@ -1,7 +1,7 @@
 import {readFileSync} from 'fs';
 import {availableESports, getMatches} from '../apis/esports';
 import renderESportsResults from '../apis/esports/render';
-import uploadYoutube from '../google/youtube';
+import uploadYoutube from '../apis/google/youtube';
 
 export default async () => {
 	availableESports.map(async (game) => {

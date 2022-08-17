@@ -2,19 +2,18 @@ import {Message} from 'discord.js';
 import {existsSync, readFileSync, writeFileSync} from 'fs';
 import {getSubtitles} from 'youtube-captions-scraper';
 
-import downloader from '../downloader';
+import downloader from '../apis/downloader';
 import {getTwitterThread} from '../apis/twitter';
 import uploadYoutube, {
 	authenticateWithOAuthCredentials,
 	authenticateWithOAuthToken,
 	categoryIds,
 	requestYoutubeConsentUrl,
-	VideoData,
-} from '../google/youtube';
+} from '../apis/google/youtube';
 import client from './discord';
 import getYoutubeID from '../utils/getYoutubeID';
 import {getQuote} from '../apis/quotes';
-import {searchImages} from '../google/search';
+import {searchImages} from '../apis/google/search';
 
 interface MessageHandler {
 	[cmd: string]: (args: string[], message: Message) => Promise<any> | any;
