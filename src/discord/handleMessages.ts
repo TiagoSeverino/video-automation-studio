@@ -14,6 +14,7 @@ import client from './discord';
 import getYoutubeID from '../utils/getYoutubeID';
 import {getQuote} from '../apis/quotes';
 import {searchImages} from '../apis/google/search';
+import {logError} from '../apis/log';
 
 interface MessageHandler {
 	[cmd: string]: (args: string[], message: Message) => Promise<any> | any;
@@ -193,7 +194,7 @@ client.on('message', async (msg) => {
 		try {
 			await handleUserMessage[cmd](args, msg);
 		} catch (err) {
-			console.error(err);
+			logError(err);
 			msg.reply('Error');
 		}
 	}
