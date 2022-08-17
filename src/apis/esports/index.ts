@@ -1,7 +1,6 @@
-import MatchResult from '../../database/models/MatchResult';
-import getCSGOMatches, {csgoTags} from './csgo';
-import getDashfightMatches from './dashfight';
-import getValorantMatches, {valorantTags} from './valorant';
+import getCSGOMatches, {csgoTags} from './api/csgo';
+import getDashfightMatches from './api/dashfight';
+import getValorantMatches, {valorantTags} from './api/valorant';
 
 export const availableESports = [
 	'csgo',
