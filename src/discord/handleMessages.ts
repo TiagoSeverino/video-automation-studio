@@ -17,6 +17,8 @@ import uploadYoutube, {
 import client from './discord';
 import getChunks from '../utils/getChunks';
 import getYoutubeID from '../utils/getYoutubeID';
+import {getQuote} from '../quotes';
+import {searchImages} from '../google/search';
 
 interface MessageHandler {
 	[cmd: string]: (args: string[], message: Message) => Promise<any> | any;
@@ -210,6 +212,19 @@ const handleUserMessage = {
 		const message = subtitles.map((subtitle) => subtitle.text).join(' ');
 
 		console.log(message);
+	},
+	quote: async (_, msg) => {
+		const quote = await getQuote();
+
+		searchImages(`${quote.author} ${quote.tags.join(' ')}`, 1).then(
+			(images) => {
+				images.map((img) => msg.reply(img));
+			}
+		);
+
+		msg.reply(`${quote.author} - ${quote.content}`);
+
+		console.log(quote);
 	},
 } as MessageHandler;
 
