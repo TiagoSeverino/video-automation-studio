@@ -1,4 +1,4 @@
-import {availableESports, getMatches} from '..';
+import {availableESports, getMatches, updateMatchResults} from '..';
 import MatchResult from '../../../database/models/MatchResult';
 import log from '../../log';
 
@@ -10,18 +10,8 @@ export default () =>
 		const before = (await MatchResult.find({game})).length;
 
 		//Store matches in the database
-		await Promise.all(
-			matches.map(async (match) => {
-				await MatchResult.updateOne(
-					{
-						id: match.id,
-					},
-					{...match, game},
-					{
-						upsert: true,
-					}
-				);
-			})
+		await updateMatchResults(
+			matches.map((match): StoreMatchResult => ({...match, game}))
 		);
 
 		const after = (await MatchResult.find({game})).length;
