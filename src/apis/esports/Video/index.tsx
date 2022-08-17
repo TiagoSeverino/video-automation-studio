@@ -5,8 +5,8 @@ import {
 	useCurrentFrame,
 	useVideoConfig,
 } from 'remotion';
-import {Background} from './Background';
-import {Result, ResultProps} from './Result';
+import {Background} from './components/Background';
+import {Result, ResultProps} from './components/Result';
 
 const cardEntrace = ({
 	index,
