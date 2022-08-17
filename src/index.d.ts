@@ -41,4 +41,5 @@ type ESportsVideo =
 	| 'ki'
 	| 'mv';
 
-type VideoCompositions = 'MatchResult';
+type VideoCompositions = 'ESportResult';
+
