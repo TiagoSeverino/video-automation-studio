@@ -3,10 +3,7 @@ import {bundle} from '@remotion/bundler';
 import {getCompositions, renderMedia} from '@remotion/renderer';
 import {v4 as uuidv4} from 'uuid';
 
-export const renderComposition = async (
-	compositionId: VideoCompositions,
-	inputProps: object
-) => {
+export default async (compositionId: VideoCompositions, inputProps: object) => {
 	const entry = './src/index.tsx';
 	const bundleLocation = await bundle(path.resolve(entry), () => undefined, {
 		webpackOverride: (config) => config,

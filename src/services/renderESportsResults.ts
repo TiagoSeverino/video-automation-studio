@@ -1,6 +1,6 @@
 import {getTags, getTitle} from '../apis/esports';
 import {categoryIds} from '../google/youtube';
-import {renderComposition} from '../renderer';
+import renderComposition from '../utils/renderComposition';
 import {dateToString} from '../utils/date';
 import getChunks from '../utils/getChunks';
 
