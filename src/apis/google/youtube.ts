@@ -20,7 +20,7 @@ export const categoryIds = {
 export default async function uploadYoutube(
 	videoData: VideoData,
 	credentials?: Credentials
-) {
+): Promise<VideoData> {
 	if (credentials) await authenticateWithOAuthCredentials(credentials);
 
 	const videoInformation = await uploadVideo(videoData);
@@ -28,7 +28,17 @@ export default async function uploadYoutube(
 	videoData.thumbnail &&
 		(await uploadThumbnail(videoInformation.id!, videoData.thumbnail));
 
-	return videoInformation;
+	if (videoInformation.id)
+		videoData = {
+			...videoData,
+			platforms: {
+				youtube: {
+					id: videoInformation.id,
+				},
+			},
+		};
+
+	return videoData;
 }
 
 const createOAuthClient = () => {

@@ -16,8 +16,12 @@ export default async () => {
 				readFileSync(`credentials.youtube.json`, 'utf8')
 			);
 
-			const youtubeResponse = await uploadYoutube(videoData, credentials);
-			log(`${videoData.title} - https://youtu.be/${youtubeResponse.id}`);
+			videoData = await uploadYoutube(videoData, credentials);
+			log(
+				`${videoData.title} - https://youtu.be/${
+					videoData.platforms!.youtube!.id
+				}`
+			);
 		});
 	});
 };
