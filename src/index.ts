@@ -4,6 +4,3 @@ import './server';
 import './discord';
 import './cronjobs';
 import './test';
-import log from './apis/log';
-
-log('Server started');
