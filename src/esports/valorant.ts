@@ -25,10 +25,8 @@ export const getValorantMatches = async (): Promise<MatchResult[]> => {
 		matchResults.map(async (match) => {
 			const matchUrl = $(match).attr('href') || '';
 
-			let team1Logo =
-				'https://www.hltv.org/img/static/team/placeholder.svg';
-			let team2Logo =
-				'https://www.hltv.org/img/static/team/placeholder.svg';
+			let team1Logo = '';
+			let team2Logo = '';
 
 			if (matchUrl.length > 0) {
 				const matchPage = await axios.get(

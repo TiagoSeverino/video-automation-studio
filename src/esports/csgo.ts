@@ -1,6 +1,9 @@
 import HLTV from 'hltv';
 import {dateToString} from '../utils/date';
 
+const fixLogoUrl = (url: string) =>
+	url.startsWith('/') ? `https://www.hltv.org${url}` : url;
+
 export const getCSGOMatches = async (): Promise<MatchResult[]> => {
 	const today = new Date();
 	const yesterday = new Date(today.getTime() - 1000 * 60 * 60 * 24);
@@ -16,12 +19,12 @@ export const getCSGOMatches = async (): Promise<MatchResult[]> => {
 			id: `csgo-${r.id}`,
 			team1: {
 				name: r.team1.name,
-				logo: r.team1.logo,
+				logo: fixLogoUrl(r.team1.logo),
 				rounds: r.result.team1,
 			},
 			team2: {
 				name: r.team2.name,
-				logo: r.team2.logo,
+				logo: fixLogoUrl(r.team2.logo),
 				rounds: r.result.team2,
 			},
 			tournament: r.event?.name,
