@@ -55,3 +55,7 @@ interface YoutubeOAuthToken {
 	client_id: string;
 	client_secret: string;
 }
+
+interface YoutubeCredentialStorage extends YoutubeOAuthToken {
+	tokens: YoutubeCrential[];
+}
