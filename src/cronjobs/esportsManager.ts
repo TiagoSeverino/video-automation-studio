@@ -1,8 +1,8 @@
-import {readFileSync} from 'fs';
 import {availableESports, getMatches} from '../apis/esports';
 import renderESportsResults from '../apis/esports/render';
 import uploadYoutube from '../apis/google/youtube';
 import log from '../apis/log';
+import getYoutubeCredentials from '../utils/getYoutubeCredentials';
 
 export default async () => {
 	availableESports.map(async (game) => {
@@ -12,16 +12,16 @@ export default async () => {
 		videosData.map(async (videoData) => {
 			log(`${matches.length} matches found for ${game}`);
 
-			const credentials = JSON.parse(
-				readFileSync(`credentials.youtube.json`, 'utf8')
-			);
+			const youtubeCredentials = await getYoutubeCredentials();
 
-			videoData = await uploadYoutube(videoData, credentials);
-			log(
-				`${videoData.title} - https://youtu.be/${
-					videoData.platforms!.youtube!.id
-				}`
-			);
+			if (youtubeCredentials) {
+				videoData = await uploadYoutube(videoData, youtubeCredentials);
+				log(
+					`${videoData.title} - https://youtu.be/${
+						videoData.platforms!.youtube!.id
+					}`
+				);
+			}
 		});
 	});
 };

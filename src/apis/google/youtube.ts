@@ -5,21 +5,13 @@ const youtube = google.youtube({version: 'v3'});
 const OAuth2 = google.auth.OAuth2;
 const fs = require('fs');
 
-interface Credentials {
-	access_token: string;
-	refresh_token: string;
-	scope: string;
-	token_type: string;
-	expiry_date: number;
-}
-
 export const categoryIds = {
 	Gaming: '20',
 };
 
 export default async function uploadYoutube(
 	videoData: VideoData,
-	credentials?: Credentials
+	credentials?: YoutubeCredentials
 ): Promise<VideoData> {
 	if (credentials) await authenticateWithOAuthCredentials(credentials);
 
@@ -86,7 +78,7 @@ export const authenticateWithOAuthToken = async (token: string) => {
 };
 
 export const authenticateWithOAuthCredentials = async (
-	credentials: Credentials
+	credentials: YoutubeCredentials
 ) => {
 	const OAuthClient = createOAuthClient();
 	OAuthClient.setCredentials(credentials);
