@@ -12,6 +12,10 @@ interface VideoData {
 	};
 }
 
+interface ESportsVideoData extends VideoData {
+	game: ESportsVideo;
+}
+
 interface MatchResult {
 	id: string;
 	team1: TeamData;
