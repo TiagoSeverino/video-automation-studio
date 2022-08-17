@@ -11,9 +11,10 @@ export const categoryIds = {
 
 export default async function uploadYoutube(
 	videoData: VideoData,
-	credentials?: YoutubeCredentials
+	oauthToken: YoutubeOAuthToken,
+	credentials: YoutubeCredential
 ): Promise<VideoData> {
-	if (credentials) await authenticateWithOAuthCredentials(credentials);
+	await authenticateWithOAuthCredentials(oauthToken, credentials);
 
 	const videoInformation = await uploadVideo(videoData);
 
@@ -33,10 +34,10 @@ export default async function uploadYoutube(
 	return videoData;
 }
 
-const createOAuthClient = (tokens: YoutubeOAuthToken) => {
+const createOAuthClient = (oauthToken: YoutubeOAuthToken) => {
 	const OAuthClient = new OAuth2(
-		tokens.client_id,
-		tokens.client_secret,
+		oauthToken.client_id,
+		oauthToken.client_secret,
 		process.env.GOOGLE_REDIRECT_URI
 	);
 
@@ -85,7 +86,7 @@ export const authenticateWithOAuthToken = async (
 
 export const authenticateWithOAuthCredentials = async (
 	oauthToken: YoutubeOAuthToken,
-	credentials: YoutubeCredentials
+	credentials: YoutubeCredential
 ) => {
 	const OAuthClient = createOAuthClient(oauthToken);
 	OAuthClient.setCredentials(credentials);

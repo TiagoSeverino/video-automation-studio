@@ -3,7 +3,7 @@ import {getSubtitles} from 'youtube-captions-scraper';
 
 import downloader from '../apis/downloader';
 import {getTwitterThread} from '../apis/twitter';
-import uploadYoutube, {
+import {
 	authenticateWithOAuthCredentials,
 	authenticateWithOAuthToken,
 	categoryIds,
@@ -14,7 +14,7 @@ import getYoutubeID from '../utils/getYoutubeID';
 import {getQuote} from '../apis/quotes';
 import {searchImages} from '../apis/google/search';
 import {logError} from '../apis/log';
-import YoutubeCredential from '../database/models/YoutubeCredential';
+import YoutubeCredentialStorage from '../database/models/YoutubeCredentialStorage';
 
 interface MessageHandler {
 	[cmd: string]: (args: string[], message: Message) => Promise<any> | any;
@@ -73,34 +73,28 @@ const promptVideoData = async (msg: Message) => {
 };
 
 const handleYoutubeLogin = async (msg: Message) => {
-	const youtubeCredential = await YoutubeCredential.findOne();
-	if (!youtubeCredential) {
-		const youtubeConsentUrl = requestYoutubeConsentUrl();
+	const youtubeCredential = await YoutubeCredentialStorage.findOne();
+	if (!youtubeCredential) return;
+
+	if (youtubeCredential.tokens.length > 0) {
+		await authenticateWithOAuthCredentials(
+			youtubeCredential,
+			youtubeCredential.tokens[0]
+		);
+	} else {
+		const youtubeConsentUrl = requestYoutubeConsentUrl(youtubeCredential);
 		await msg.reply(`Login to Youtube: ${youtubeConsentUrl}`);
 
 		const youtubeToken = await waitReply(msg);
 
-		const credentials = await authenticateWithOAuthToken(youtubeToken);
-		await YoutubeCredential.create(credentials);
-	} else {
-		await authenticateWithOAuthCredentials(youtubeCredential);
+		const credentials = await authenticateWithOAuthToken(
+			youtubeCredential,
+			youtubeToken
+		);
+
+		youtubeCredential.tokens.push(credentials);
+		await youtubeCredential.save();
 	}
-};
-
-const handleYoutubeUpload = async (msg: Message, videoData: VideoData) => {
-	const canUploadYoutube = await handleQuestion(
-		msg,
-		'Upload to Youtube?',
-		true
-	);
-
-	if (!canUploadYoutube) return false;
-
-	await handleYoutubeLogin(msg);
-
-	const mainMsg = await msg.reply('Uploading to youtube');
-	const youtubeResponse = await uploadYoutube(videoData);
-	await mainMsg.edit(`https://youtu.be/${youtubeResponse.id}`);
 };
 
 const userMessageDescription = {

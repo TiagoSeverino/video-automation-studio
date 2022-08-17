@@ -6,7 +6,11 @@ export default async (videoData: VideoData) => {
 	const youtubeCredentials = await getYoutubeCredentials();
 
 	if (youtubeCredentials) {
-		videoData = await uploadYoutube(videoData, youtubeCredentials);
+		videoData = await uploadYoutube(
+			videoData,
+			youtubeCredentials,
+			youtubeCredentials.tokens[0]
+		);
 		log(
 			`${videoData.title} - https://youtu.be/${
 				videoData.platforms!.youtube!.id
