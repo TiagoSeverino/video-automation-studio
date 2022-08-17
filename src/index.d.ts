@@ -4,7 +4,7 @@ interface VideoData {
 	description: string;
 	tags: string[];
 	thumbnail?: string;
-	categoryId: number;
+	categoryId: string;
 	platforms?: {
 		youtube?: {
 			id: string;

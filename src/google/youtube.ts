@@ -5,11 +5,24 @@ const youtube = google.youtube({version: 'v3'});
 const OAuth2 = google.auth.OAuth2;
 const fs = require('fs');
 
+interface Credentials {
+	access_token: string;
+	refresh_token: string;
+	scope: string;
+	token_type: string;
+	expiry_date: number;
+}
+
 export const categoryIds = {
-	Gaming: 20,
+	Gaming: '20',
 };
 
-export default async function uploadYoutube(videoData: VideoData) {
+export default async function uploadYoutube(
+	videoData: VideoData,
+	credentials?: Credentials
+) {
+	if (credentials) await authenticateWithOAuthCredentials(credentials);
+
 	const videoInformation = await uploadVideo(videoData);
 
 	videoData.thumbnail &&
@@ -62,13 +75,9 @@ export const authenticateWithOAuthToken = async (token: string) => {
 	return credentials;
 };
 
-export const authenticateWithOAuthCredentials = async (credentials: {
-	access_token: string;
-	refresh_token: string;
-	scope: string;
-	token_type: string;
-	expiry_date: number;
-}) => {
+export const authenticateWithOAuthCredentials = async (
+	credentials: Credentials
+) => {
 	const OAuthClient = createOAuthClient();
 	OAuthClient.setCredentials(credentials);
 	await setGlobalGoogleAuthentication(OAuthClient);
