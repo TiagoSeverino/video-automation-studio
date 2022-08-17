@@ -3,10 +3,7 @@ import {existsSync, readFileSync, writeFileSync} from 'fs';
 import {getSubtitles} from 'youtube-captions-scraper';
 
 import downloader from '../downloader';
-import {renderMatchResult} from '../renderer';
 import {getTwitterThread} from '../twitter';
-import {dateToString} from '../utils/date';
-import {availableGames, getMatches, getTags, getTitle} from '../esports';
 import uploadYoutube, {
 	authenticateWithOAuthCredentials,
 	authenticateWithOAuthToken,
@@ -15,7 +12,6 @@ import uploadYoutube, {
 	VideoData,
 } from '../google/youtube';
 import client from './discord';
-import getChunks from '../utils/getChunks';
 import getYoutubeID from '../utils/getYoutubeID';
 import {getQuote} from '../quotes';
 import {searchImages} from '../google/search';
@@ -112,48 +108,6 @@ const handleYoutubeUpload = async (msg: Message, videoData: VideoData) => {
 	await mainMsg.edit(`https://youtu.be/${youtubeResponse.id}`);
 };
 
-const generateEsportVideo = async (msg: Message, game: ESportsVideo) => {
-	const mainMsg = await msg.reply('Fetching matches');
-
-	const matches = await getMatches(game);
-
-	if (matches.length === 0) return mainMsg.edit('No matches found!');
-
-	mainMsg.edit(`Rendering ${matches.length} matches`);
-
-	await Promise.all(
-		getChunks(matches, 5).map(async (chunk) => {
-			const path = await renderMatchResult(chunk);
-
-			const videoData = {
-				title: `${getTitle(game)} ${dateToString(new Date(), false)}`,
-				description: chunk
-					.map(
-						(m) =>
-							`${m.team1.name} ${m.team1.rounds} - ${m.team2.rounds} ${m.team2.name} at ${m.tournament}`
-					)
-					.join('\n'),
-				tags: [
-					...new Set(
-						[
-							...getTags(game),
-							...chunk.map((m) => m.team1.name),
-							...chunk.map((m) => m.team2.name),
-							...chunk.map((m) => m.tournament || ''),
-						].filter((t) => t.length > 0)
-					),
-				],
-				path,
-				categoryId: categoryIds.Gaming,
-			};
-
-			await handleYoutubeUpload(msg, videoData);
-		})
-	);
-
-	await mainMsg.delete();
-};
-
 const userMessageDescription = {
 	download: ['Downloads a video and reupload', ['<url>']],
 } as CommandDescription;
@@ -227,15 +181,6 @@ const handleUserMessage = {
 		console.log(quote);
 	},
 } as MessageHandler;
-
-availableGames.map((game) => {
-	handleUserMessage[game] = async (_, msg) =>
-		await generateEsportVideo(msg, game);
-	userMessageDescription[game] = [
-		`Generates video with daily ${game} results`,
-		[],
-	];
-});
 
 client.on('message', async (msg) => {
 	if (!msg.content.startsWith('!')) return;
