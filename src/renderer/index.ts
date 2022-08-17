@@ -1,5 +1,4 @@
 import path from 'path';
-import {writeFileSync} from 'fs';
 import {bundle} from '@remotion/bundler';
 import {getCompositions, renderMedia} from '@remotion/renderer';
 import {v4 as uuidv4} from 'uuid';
