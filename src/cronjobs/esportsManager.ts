@@ -1,5 +1,5 @@
 import {availableESports, getMatches} from '../apis/esports';
-import renderESportsResults from '../apis/esports/render';
+import renderESportsResults from '../apis/esports/Video/render';
 import log from '../apis/log';
 import uploadVideo from '../utils/uploadVideo';
 
