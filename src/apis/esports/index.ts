@@ -1,3 +1,4 @@
+import MatchResult from '../../database/models/MatchResult';
 import getCSGOMatches, {csgoTags} from './api/csgo';
 import getDashfightMatches from './api/dashfight';
 import getValorantMatches, {valorantTags} from './api/valorant';
@@ -64,3 +65,17 @@ export const getTitle = (game: ESportsVideo) => {
 			return `${game.toUpperCase()} Match Results`;
 	}
 };
+
+export const updateMatchResult = async (match: StoreMatchResult) =>
+	MatchResult.updateOne(
+		{
+			id: match.id,
+		},
+		match,
+		{
+			upsert: true,
+		}
+	);
+
+export const updateMatchResults = async (matches: StoreMatchResult[]) =>
+	Promise.all(matches.map(updateMatchResult));

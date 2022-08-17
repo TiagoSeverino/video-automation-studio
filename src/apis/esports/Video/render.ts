@@ -6,8 +6,8 @@ import getChunks from '../../../utils/getChunks';
 
 export default async (
 	game: ESportsVideo,
-	matches: MatchResult[]
-): Promise<{videoData: VideoData; results: MatchResult[]}[]> => {
+	matches: StoreMatchResult[]
+): Promise<{videoData: ESportsVideoData; results: StoreMatchResult[]}[]> => {
 	const chunks = getChunks(matches, 5);
 
 	return Promise.all(
@@ -41,7 +41,8 @@ export default async (
 					],
 					path,
 					categoryId: categoryIds.Gaming,
-				} as VideoData,
+					game,
+				} as ESportsVideoData,
 				results: chunk,
 			};
 		})
