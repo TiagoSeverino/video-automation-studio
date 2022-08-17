@@ -43,7 +43,7 @@ type ESportsVideo =
 
 type VideoCompositions = 'ESportResult';
 
-interface YoutubeCredentials {
+interface YoutubeCredential {
 	access_token: string;
 	refresh_token: string;
 	scope: string;

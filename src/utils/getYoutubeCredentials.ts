@@ -1,12 +1,12 @@
-import YoutubeCredentials from '../database/models/YoutubeCredentials';
+import YoutubeCredential from '../database/models/YoutubeCredential';
 
-export default async (): Promise<YoutubeCredentials | undefined> => {
-	const credentials = await YoutubeCredentials.findOne();
+export default async (): Promise<YoutubeCredential | undefined> => {
+	const credential = await YoutubeCredential.findOne();
 
-	if (!credentials) {
-		log('No credentials found, insert into DB');
+	if (!credential) {
+		log('No credential found, insert into DB');
 		return undefined;
 	}
 
-	return credentials;
+	return credential;
 };

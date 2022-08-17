@@ -1,6 +1,6 @@
 import {Schema, model} from 'mongoose';
 
-const youtubeCredentialsSchema = new Schema<YoutubeCredentials>(
+const youtubeCredentialSchema = new Schema<YoutubeCredential>(
 	{
 		access_token: {type: String, required: true},
 		refresh_token: {type: String, required: true},
@@ -13,7 +13,7 @@ const youtubeCredentialsSchema = new Schema<YoutubeCredentials>(
 	}
 );
 
-export default model<YoutubeCredentials>(
-	'YoutubeCredentials',
-	youtubeCredentialsSchema
+export default model<YoutubeCredential>(
+	'YoutubeCredential',
+	youtubeCredentialSchema
 );

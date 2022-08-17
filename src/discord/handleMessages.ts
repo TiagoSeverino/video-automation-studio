@@ -14,7 +14,7 @@ import getYoutubeID from '../utils/getYoutubeID';
 import {getQuote} from '../apis/quotes';
 import {searchImages} from '../apis/google/search';
 import {logError} from '../apis/log';
-import YoutubeCredentials from '../database/models/YoutubeCredentials';
+import YoutubeCredential from '../database/models/YoutubeCredential';
 
 interface MessageHandler {
 	[cmd: string]: (args: string[], message: Message) => Promise<any> | any;
@@ -73,17 +73,17 @@ const promptVideoData = async (msg: Message) => {
 };
 
 const handleYoutubeLogin = async (msg: Message) => {
-	const youtubeCredentials = await YoutubeCredentials.findOne();
-	if (!youtubeCredentials) {
+	const youtubeCredential = await YoutubeCredential.findOne();
+	if (!youtubeCredential) {
 		const youtubeConsentUrl = requestYoutubeConsentUrl();
 		await msg.reply(`Login to Youtube: ${youtubeConsentUrl}`);
 
 		const youtubeToken = await waitReply(msg);
 
 		const credentials = await authenticateWithOAuthToken(youtubeToken);
-		await YoutubeCredentials.create(credentials);
+		await YoutubeCredential.create(credentials);
 	} else {
-		await authenticateWithOAuthCredentials(youtubeCredentials);
+		await authenticateWithOAuthCredentials(youtubeCredential);
 	}
 };
 
