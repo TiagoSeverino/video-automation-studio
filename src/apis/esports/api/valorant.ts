@@ -2,7 +2,11 @@ import axios from 'axios';
 import * as cheerio from 'cheerio';
 
 const fixLogoUrl = (url: string) =>
-	url.startsWith('//') ? `https:${url}` : url;
+	url.startsWith('/')
+		? url.startsWith('//')
+			? `https:${url}`
+			: `https://www.vlr.gg/${url}`
+		: url;
 
 export default async (): Promise<MatchResult[]> => {
 	const res = await axios.get('https://www.vlr.gg/matches/results');
