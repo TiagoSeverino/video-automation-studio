@@ -78,7 +78,12 @@ export const uploadTitok = async (videoData: ESportsVideoData) => {
 		if (!selectFileButton)
 			throw new Error('Could not find tiktok select file button');
 
-		await captionInput?.type(videoData.title);
+		await captionInput?.type(
+			`${videoData.title} ${videoData.tags
+				.sort((a, b) => a.length - b.length)
+				.map((t) => `#${t}`.replace(/\s/g, ''))
+				.join(' ')}`.slice(0, 149)
+		);
 
 		//Upload Video
 		const [fileChooser] = await Promise.all([
