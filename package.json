@@ -29,6 +29,8 @@
 		"node-cron": "^3.0.2",
 		"prettier": "^2.2.1",
 		"puppeteer": "^16.1.1",
+		"puppeteer-extra": "^3.3.4",
+		"puppeteer-extra-plugin-stealth": "^2.11.1",
 		"react": "^18.0.0",
 		"react-dom": "^18.0.0",
 		"remotion": "^3.0.0",
