@@ -54,8 +54,6 @@ export const uploadTitok = async (videoData: ESportsVideoData) => {
 			waitUntil: 'networkidle2',
 		});
 
-		console.log('Logging in...');
-
 		//Select upload iframe
 		const iframe = page
 			.frames()
@@ -82,17 +80,12 @@ export const uploadTitok = async (videoData: ESportsVideoData) => {
 
 		await captionInput?.type(videoData.title);
 
-		console.log('Waiting for file chooser');
-
 		//Upload Video
 		const [fileChooser] = await Promise.all([
 			page.waitForFileChooser(),
 			selectFileButton.click(),
 		]);
 
-		console.log('Uploading video');
-
-		console.log(videoData.path);
 		await fileChooser.accept([videoData.path]);
 
 		const postButton = await iframe.waitForXPath(
@@ -112,7 +105,7 @@ export const uploadTitok = async (videoData: ESportsVideoData) => {
 	} catch (e) {
 		logError('Could not upload video to TikTok');
 		console.error(e);
-		await browser.close();
+		browser.close();
 	} finally {
 		browser.close();
 	}
