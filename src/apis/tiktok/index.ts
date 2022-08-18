@@ -104,9 +104,10 @@ export const uploadTitok = async (videoData: ESportsVideoData) => {
 
 		await postButton.click();
 
-		await page.waitForNavigation({
-			waitUntil: 'networkidle2',
-		});
+		//Wait for upload to finish
+		await iframe.waitForXPath(
+			`//*[text()='Your video is being uploaded to TikTok!']`
+		);
 	} catch (e) {
 		logError('Could not upload video to TikTok');
 		console.error(e);
