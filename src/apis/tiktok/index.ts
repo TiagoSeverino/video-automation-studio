@@ -42,9 +42,10 @@ const getBrowser = async (cookies: Protocol.Network.CookieParam[] = []) => {
 	};
 };
 
-export const uploadTitok = async (videoData: ESportsVideoData) => {
-	const cookies = require('./cookies.json');
-
+export const uploadTitok = async (
+	videoData: ESportsVideoData,
+	cookies: Cookie[] = []
+) => {
 	const {browser, page} = await getBrowser(cookies);
 
 	try {

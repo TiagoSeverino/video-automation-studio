@@ -77,3 +77,10 @@ interface CronJob {
 	cron: string;
 	job: () => any;
 }
+
+interface Cookie {
+	domain: string;
+	name: string;
+	path: string;
+	value: string;
+}
