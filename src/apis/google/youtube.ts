@@ -1,6 +1,7 @@
 import {createReadStream} from 'fs';
 import {OAuth2Client} from 'google-auth-library';
 import {google} from 'googleapis';
+import log from '../log';
 
 const youtube = google.youtube({version: 'v3'});
 const OAuth2 = google.auth.OAuth2;
@@ -21,7 +22,7 @@ export default async function uploadYoutube(
 	videoData.thumbnail &&
 		(await uploadThumbnail(videoInformation.id!, videoData.thumbnail));
 
-	if (videoInformation.id)
+	if (videoInformation.id) {
 		videoData = {
 			...videoData,
 			platforms: {
@@ -30,6 +31,11 @@ export default async function uploadYoutube(
 				},
 			},
 		};
+
+		log(
+			`Uploaded video ${videoData.title} to youtube: https://youtu.be/${videoInformation.id}`
+		);
+	}
 
 	return videoData;
 }
