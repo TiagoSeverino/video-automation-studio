@@ -1,3 +1,5 @@
+import {startOfDay, endOfDay} from 'date-fns';
+
 import {availableESports, updateMatchResults} from '..';
 import ESportsVideoData from '../../../database/models/ESportsVideoData';
 import MatchResult from '../../../database/models/MatchResult';
@@ -16,7 +18,22 @@ export default async () =>
 
 		//Render matches
 		log(`Rendering ${matchesNotRendered.length} matches for ${game}`);
-		const videosData = await render(game, matchesNotRendered);
+
+		const videoDataCountToday = (
+			await ESportsVideoData.find({
+				createdAt: {
+					$gte: startOfDay(new Date()),
+					$lte: endOfDay(new Date()),
+				},
+				game,
+			})
+		).length;
+
+		const videosData = await render(
+			game,
+			matchesNotRendered,
+			videoDataCountToday
+		);
 
 		//Save VideoData to database
 		videosData.map(async ({videoData, results}) => {

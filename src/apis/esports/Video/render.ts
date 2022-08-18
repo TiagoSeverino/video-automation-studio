@@ -6,23 +6,25 @@ import getChunks from '../../../utils/getChunks';
 
 export default async (
 	game: ESportsVideo,
-	matches: StoreMatchResult[]
+	matches: StoreMatchResult[],
+	count = 0
 ): Promise<{videoData: ESportsVideoData; results: StoreMatchResult[]}[]> => {
 	const chunks = getChunks(matches, 5);
 
 	return Promise.all(
 		chunks.map(async (chunk, k) => {
-			const suffix = chunks.length > 1 ? `#${k + 1}` : '';
+			const currentCount =
+				count > 0 || chunks.length > 1 ? ` #${count + k + 1} ` : ' ';
 			const path = await renderComposition('ESportResult', {
 				matches: chunk,
 			});
 
 			return {
 				videoData: {
-					title: `${getTitle(game)} ${dateToString(
+					title: `${getTitle(game)}${currentCount}${dateToString(
 						new Date(),
 						false
-					)} ${suffix}`,
+					)}`,
 					description: chunk
 						.map(
 							(m) =>
