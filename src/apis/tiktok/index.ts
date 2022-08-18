@@ -25,9 +25,7 @@ const getBrowser = async (cookies: Protocol.Network.CookieParam[] = []) => {
 		cookies.map(async (cookie) => {
 			try {
 				await page.setCookie(cookie);
-			} catch (e) {
-				console.log(`Failed to set cookie: ${cookie.name}`);
-			}
+			} catch {}
 		})
 	);
 
@@ -102,12 +100,30 @@ export const uploadTitok = async (videoData: ESportsVideoData) => {
 
 		if (!postButton) throw new Error('Could not find tiktok post button');
 
-		await postButton.click();
+		const [createVideoResponse] = await Promise.all([
+			page.waitForResponse(
+				(res) =>
+					res
+						.url()
+						.toLowerCase()
+						.includes('tiktok.com/api/v1/item/create/?video_id'),
+				{
+					timeout: 60000,
+				}
+			),
+			postButton.click(),
+		]);
 
-		//Wait for upload to finish
-		await iframe.waitForXPath(
-			`//*[text()='Your video is being uploaded to TikTok!']`
-		);
+		const {item_id} = (await createVideoResponse.json()) as {
+			item_id?: string;
+		};
+
+		if (!item_id) throw new Error('Could not create tiktok video');
+
+		console.log('Uploaded TikTok video');
+
+		await browser.close();
+		return item_id;
 	} catch (e) {
 		logError('Could not upload video to TikTok');
 		console.error(e);
