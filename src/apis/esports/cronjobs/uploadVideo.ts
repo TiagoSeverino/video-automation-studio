@@ -10,30 +10,30 @@ export default async () => {
 		(videoData) => !videoData.platforms?.youtube?.id
 	);
 
-	if (videosForYoutube.length > 0) {
-		log(`Uploading ${videosForYoutube.length} videos for youtube`);
+	if (videosForYoutube.length === 0) return;
 
-		const youtubeCredentials = await YoutubeCredentialStorage.findOne();
+	log(`Uploading ${videosForYoutube.length} videos for youtube`);
 
-		await Promise.all(
-			videosForYoutube.map(async (videoData) => {
-				if (youtubeCredentials !== null) {
-					const youtubeId = await uploadYoutube(
-						videoData,
-						youtubeCredentials,
-						youtubeCredentials.tokens[0]
-					);
+	const youtubeCredentials = await YoutubeCredentialStorage.findOne();
 
-					videoData.platforms = {
-						...videoData.platforms,
-						youtube: {
-							id: youtubeId,
-						},
-					};
+	await Promise.all(
+		videosForYoutube.map(async (videoData) => {
+			if (youtubeCredentials !== null) {
+				const youtubeId = await uploadYoutube(
+					videoData,
+					youtubeCredentials,
+					youtubeCredentials.tokens[0]
+				);
 
-					await videoData.save();
-				}
-			})
-		);
-	}
+				videoData.platforms = {
+					...videoData.platforms,
+					youtube: {
+						id: youtubeId,
+					},
+				};
+
+				await videoData.save();
+			}
+		})
+	);
 };
