@@ -18,13 +18,19 @@ export default async () => {
 		await Promise.all(
 			videosForYoutube.map(async (videoData) => {
 				if (youtubeCredentials !== null) {
-					const {platforms} = await uploadYoutube(
+					const youtubeId = await uploadYoutube(
 						videoData,
 						youtubeCredentials,
 						youtubeCredentials.tokens[0]
 					);
 
-					videoData.platforms!.youtube = platforms!['youtube'];
+					videoData.platforms = {
+						...videoData.platforms,
+						youtube: {
+							id: youtubeId,
+						},
+					};
+
 					await videoData.save();
 				}
 			})

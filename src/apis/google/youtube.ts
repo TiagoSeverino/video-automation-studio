@@ -14,7 +14,7 @@ export default async function uploadYoutube(
 	videoData: VideoData,
 	oauthToken: YoutubeOAuthToken,
 	credentials: YoutubeCredential
-): Promise<VideoData> {
+): Promise<string> {
 	await authenticateWithOAuthCredentials(oauthToken, credentials);
 
 	const videoInformation = await uploadVideo(videoData);
@@ -22,22 +22,13 @@ export default async function uploadYoutube(
 	videoData.thumbnail &&
 		(await uploadThumbnail(videoInformation.id!, videoData.thumbnail));
 
-	if (videoInformation.id) {
-		videoData = {
-			...videoData,
-			platforms: {
-				youtube: {
-					id: videoInformation.id,
-				},
-			},
-		};
+	if (!videoInformation.id) throw new Error('Error uploading to youtube');
 
-		log(
-			`Uploaded video ${videoData.title} to youtube: https://youtu.be/${videoInformation.id}`
-		);
-	}
+	log(
+		`Uploaded video ${videoData.title} to youtube: https://youtu.be/${videoInformation.id}`
+	);
 
-	return videoData;
+	return videoInformation.id;
 }
 
 const createOAuthClient = (oauthToken: YoutubeOAuthToken) => {
