@@ -12,6 +12,9 @@ const ESportsVideoDataSchema = new Schema<ESportsVideoData>(
 			youtube: {
 				id: {type: String, required: false},
 			},
+			tiktok: {
+				id: {type: String, required: false},
+			},
 		},
 		game: {type: String, required: true},
 	},

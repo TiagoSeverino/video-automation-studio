@@ -9,6 +9,9 @@ interface VideoData {
 		youtube?: {
 			id: string;
 		};
+		tiktok?: {
+			id: string;
+		};
 	};
 }
 
