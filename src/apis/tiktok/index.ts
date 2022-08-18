@@ -111,8 +111,7 @@ export const uploadTitok = async (videoData: ESportsVideoData) => {
 	} catch (e) {
 		logError('Could not upload video to TikTok');
 		console.error(e);
-		browser.close();
-	} finally {
-		browser.close();
 	}
+
+	await browser.close();
 };
