@@ -25,81 +25,92 @@ export default async (): Promise<MatchResult[]> => {
 				.map((a) => matchResults.push(a));
 		});
 
-	return Promise.all(
-		matchResults.map(async (match) => {
-			const matchUrl = $(match).attr('href') || '';
+	return (
+		await Promise.all(
+			matchResults.map(async (match) => {
+				const matchUrl = $(match).attr('href') || '';
 
-			let team1Logo = '';
-			let team2Logo = '';
+				try {
+					const $$ = cheerio.load(
+						(await axios.get(`https://www.vlr.gg${matchUrl}`)).data
+					);
 
-			if (matchUrl.length > 0) {
-				const matchPage = await axios.get(
-					`https://www.vlr.gg${matchUrl}`
-				);
-				const $$ = cheerio.load(matchPage.data);
+					const team1Logo =
+						$$('.match-header-link img').first().attr('src') || '';
 
-				team1Logo =
-					$$('.match-header-link img').first().attr('src') || '';
+					const team2Logo =
+						$$('.match-header-link img').last().attr('src') || '';
 
-				team2Logo =
-					$$('.match-header-link img').last().attr('src') || '';
-			}
+					const team1 = {
+						name: $(match)
+							.find('.match-item-vs-team-name')
+							.first()
+							.text()
+							.trim(),
+						logo: fixLogoUrl(team1Logo),
+						rounds: parseInt(
+							$(match)
+								.find('.match-item-vs-team-score')
+								.first()
+								.text()
+						),
+					};
 
-			const team1 = {
-				name: $(match)
-					.find('.match-item-vs-team-name')
-					.first()
-					.text()
-					.trim(),
-				logo: fixLogoUrl(team1Logo),
-				rounds: parseInt(
-					$(match).find('.match-item-vs-team-score').first().text()
-				),
-			};
+					const team2 = {
+						name: $(match)
+							.find('.match-item-vs-team-name')
+							.last()
+							.text()
+							.trim(),
+						logo: fixLogoUrl(team2Logo),
+						rounds: parseInt(
+							$(match)
+								.find('.match-item-vs-team-score')
+								.last()
+								.text()
+						),
+					};
 
-			const team2 = {
-				name: $(match)
-					.find('.match-item-vs-team-name')
-					.last()
-					.text()
-					.trim(),
-				logo: fixLogoUrl(team2Logo),
-				rounds: parseInt(
-					$(match).find('.match-item-vs-team-score').last().text()
-				),
-			};
+					const event = $(match)
+						.find('.match-item-event')
+						.children()
+						.text()
+						.trim();
 
-			const event = $(match)
-				.find('.match-item-event')
-				.children()
-				.text()
-				.trim();
+					const [type, bracket] = event.toLowerCase().split('–');
 
-			const [type, bracket] = event.toLowerCase().split('–');
+					let stars = 1;
 
-			let stars = 1;
+					stars += type.includes('main event') ? 2 : 0;
+					stars += type.includes('qualifier') ? 1 : 0;
+					stars += type.includes('valorant regional leagues') ? 1 : 0;
 
-			stars += type.includes('main event') ? 2 : 0;
-			stars += type.includes('qualifier') ? 1 : 0;
-			stars += type.includes('valorant regional leagues') ? 1 : 0;
+					stars += bracket.includes('grand final') ? 1 : 0;
 
-			stars += bracket.includes('grand final') ? 1 : 0;
+					const tournament = $(match)
+						.find('.match-item-event')
+						.children()
+						.remove()
+						.end()
+						.text()
+						.trim();
 
-			const tournament = $(match)
-				.find('.match-item-event')
-				.children()
-				.remove()
-				.end()
-				.text()
-				.trim();
+					if (isNaN(team1.rounds) || isNaN(team2.rounds)) return;
+					if (team1.rounds < 0 || team2.rounds < 0) return;
+					if (team1.rounds === 0 && team2.rounds === 0) return;
 
-			return {
-				id: `valorant-${matchUrl.split('/')[1]}`,
-				team1,
-				team2,
-				tournament,
-				stars,
-			};
-		})
-	);
+					return {
+						id: `valorant-${matchUrl.split('/')[1]}`,
+						team1,
+						team2,
+						tournament,
+						stars,
+					};
+				} catch (e) {
+					console.error(e);
+					console.log(`Error parsing valorant match: ${matchUrl}`);
+				}
+			})
+		)
+	).filter((r) => r !== undefined) as MatchResult[];
 };
