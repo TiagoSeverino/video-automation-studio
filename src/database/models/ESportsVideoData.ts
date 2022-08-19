@@ -8,14 +8,7 @@ const ESportsVideoDataSchema = new Schema<ESportsVideoData>(
 		tags: [{type: String, required: true}],
 		thumbnail: {type: String, required: false},
 		categoryId: {type: String, required: true},
-		platforms: {
-			youtube: {
-				id: {type: String, required: false},
-			},
-			tiktok: {
-				id: {type: String, required: false},
-			},
-		},
+		platforms: {type: Schema.Types.Mixed, required: false},
 		game: {type: String, required: true},
 	},
 	{
