@@ -8,7 +8,7 @@ const log = (message: string) => {
 			.post(process.env.WEBHOOK_URL, {
 				content: message,
 			})
-			.catch(console.error);
+			.catch(() => console.log('Error sending webhook'));
 };
 
 export const logError = (message: string) => {
