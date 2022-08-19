@@ -59,18 +59,16 @@ export default async () => {
 
 				if (!tiktokId) continue;
 
-				const url = `https://www.tiktok.com/@${tiktokAccount.name}/video/${tiktokId}`;
-
 				videoData.platforms = {
 					...videoData.platforms,
 					tiktok: {
-						id: url,
+						id: `https://www.tiktok.com/@${tiktokAccount.name}/video/${tiktokId}`,
 					},
 				};
 
 				await videoData.save();
 
-				log(url);
+				log(videoData.platforms!.tiktok!.id);
 			} catch (err) {
 				logError("Couldn't upload video to tiktok");
 				console.error(err);
