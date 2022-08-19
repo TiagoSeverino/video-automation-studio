@@ -115,13 +115,13 @@ export const uploadTitok = async (
 			postButton.click(),
 		]);
 
-		const {item_id} = (await createVideoResponse.json()) as {
+		const {item_id, status_msg} = (await createVideoResponse.json()) as {
 			item_id?: string;
+			status_msg?: string;
 		};
 
-		if (!item_id) throw new Error('Could not create tiktok video');
-
-		console.log('Uploaded TikTok video');
+		if (!item_id)
+			throw new Error(status_msg || 'Could not create tiktok video');
 
 		await browser.close();
 		return item_id;
