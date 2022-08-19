@@ -2,7 +2,7 @@ import ESportsVideoData from '../../../database/models/ESportsVideoData';
 import TiktokAccount from '../../../database/models/TiktokAccount';
 import YoutubeCredentialStorage from '../../../database/models/YoutubeCredentialStorage';
 import uploadYoutube from '../../google/youtube';
-import log from '../../log';
+import log, {logError} from '../../log';
 import {uploadTitok} from '../../tiktok';
 
 export default async () => {
@@ -11,13 +11,13 @@ export default async () => {
 	);
 
 	if (videosForYoutube.length > 0) {
-		log(`Uploading ${videosForYoutube.length} videos for youtube`);
-
 		const youtubeCredentials = await YoutubeCredentialStorage.findOne();
+		if (!youtubeCredentials)
+			return logError('No youtube credentials found');
 
 		await Promise.all(
 			videosForYoutube.map(async (videoData) => {
-				if (youtubeCredentials !== null) {
+				try {
 					const youtubeId = await uploadYoutube(
 						videoData,
 						youtubeCredentials,
@@ -32,6 +32,11 @@ export default async () => {
 					};
 
 					await videoData.save();
+
+					log(`https://youtu.be/${youtubeId}`);
+				} catch (err) {
+					logError("Couldn't upload video to youtube");
+					console.error(err);
 				}
 			})
 		);
@@ -43,30 +48,33 @@ export default async () => {
 
 	if (videosForTiktok.length > 0) {
 		const tiktokAccount = await TiktokAccount.findOne();
-		if (!tiktokAccount) return;
-
-		log(`Uploading ${videosForTiktok.length} videos for tiktok`);
+		if (!tiktokAccount) return logError('No tiktok account found');
 
 		for (const videoData of videosForTiktok) {
-			const tiktokId = await uploadTitok(
-				videoData,
-				tiktokAccount.cookies
-			);
+			try {
+				const tiktokId = await uploadTitok(
+					videoData,
+					tiktokAccount.cookies
+				);
 
-			if (!tiktokId) continue;
+				if (!tiktokId) continue;
 
-			const url = `https://www.tiktok.com/@${tiktokAccount.name}/video/${tiktokId}`;
+				const url = `https://www.tiktok.com/@${tiktokAccount.name}/video/${tiktokId}`;
 
-			videoData.platforms = {
-				...videoData.platforms,
-				tiktok: {
-					id: url,
-				},
-			};
+				videoData.platforms = {
+					...videoData.platforms,
+					tiktok: {
+						id: url,
+					},
+				};
 
-			await videoData.save();
+				await videoData.save();
 
-			log(`Uploaded tiktok: ${url}`);
+				log(url);
+			} catch (err) {
+				logError("Couldn't upload video to tiktok");
+				console.error(err);
+			}
 		}
 	}
 };
