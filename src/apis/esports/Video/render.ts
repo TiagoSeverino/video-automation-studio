@@ -1,4 +1,4 @@
-import {getTags, getTitle} from '../';
+import {getTitle} from '../';
 import {categoryIds} from '../../google/youtube';
 import renderComposition from '../../../utils/renderComposition';
 import {dateToString} from '../../../utils/date';
@@ -42,7 +42,7 @@ export default async (
 				tags: [
 					...new Set(
 						[
-							...getTags(game),
+							game,
 							...chunk.map((m) => m.team1.name),
 							...chunk.map((m) => m.team2.name),
 							...chunk.map((m) => m.tournament || ''),

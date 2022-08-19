@@ -1,7 +1,7 @@
 import MatchResult from '../../database/models/MatchResult';
-import getCSGOMatches, {csgoTags} from './api/csgo';
+import getCSGOMatches from './api/csgo';
 import getDashfightMatches from './api/dashfight';
-import getValorantMatches, {valorantTags} from './api/valorant';
+import getValorantMatches from './api/valorant';
 
 export const availableESports = [
 	'csgo',
@@ -41,17 +41,6 @@ export const getMatches = (game: ESportsVideo): Promise<MatchResult[]> => {
 			return getDashfightMatches(game);
 		default:
 			return Promise.reject(new Error('Invalid game'));
-	}
-};
-
-export const getTags = (game: ESportsVideo) => {
-	switch (game) {
-		case 'csgo':
-			return csgoTags;
-		case 'valorant':
-			return valorantTags;
-		default:
-			return [];
 	}
 };
 

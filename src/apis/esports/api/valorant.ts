@@ -103,5 +103,3 @@ export default async (): Promise<MatchResult[]> => {
 		})
 	);
 };
-
-export const valorantTags = ['valorant'];

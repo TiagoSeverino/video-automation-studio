@@ -32,5 +32,3 @@ export default async (): Promise<MatchResult[]> => {
 		};
 	});
 };
-
-export const csgoTags = ['csgo'];
