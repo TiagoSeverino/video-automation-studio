@@ -1,4 +1,5 @@
 import MatchResult from '../../database/models/MatchResult';
+import {logError} from '../log';
 import getCSGOMatches from './api/csgo';
 import getDashfightMatches from './api/dashfight';
 import getValorantMatches from './api/valorant';
@@ -19,29 +20,36 @@ export const availableESports = [
 	'mv',
 ] as ESportsVideo[];
 
-export const getMatches = (game: ESportsVideo): Promise<MatchResult[]> => {
-	switch (game) {
-		case 'csgo':
-			return getCSGOMatches();
-		case 'valorant':
-			return getValorantMatches();
-
-		//Dashfight
-		case 'ssbu':
-		case 'tekken7':
-		case 'sf5':
-		case 'mk11':
-		case 'dbfz':
-		case 'ggst':
-		case 'sc6':
-		case 'bh':
-		case 'skullgirls':
-		case 'ki':
-		case 'mv':
-			return getDashfightMatches(game);
-		default:
-			return Promise.reject(new Error('Invalid game'));
+export const getMatches = async (
+	game: ESportsVideo
+): Promise<MatchResult[]> => {
+	try {
+		switch (game) {
+			case 'csgo':
+				return getCSGOMatches();
+			case 'valorant':
+				return getValorantMatches();
+			//Dashfight
+			case 'ssbu':
+			case 'tekken7':
+			case 'sf5':
+			case 'mk11':
+			case 'dbfz':
+			case 'ggst':
+			case 'sc6':
+			case 'bh':
+			case 'skullgirls':
+			case 'ki':
+			case 'mv':
+				return getDashfightMatches(game);
+			default:
+				return Promise.reject(new Error('Invalid game'));
+		}
+	} catch (error) {
+		logError(`Error getting ${game} matches`);
 	}
+
+	return Promise.all([]);
 };
 
 export const getTitle = (game: ESportsVideo) => {
