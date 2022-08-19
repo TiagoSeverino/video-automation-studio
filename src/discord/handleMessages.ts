@@ -169,6 +169,9 @@ const handleUserMessage = {
 
 		console.log(quote);
 	},
+	youtube: async (_, msg) => {
+		await handleYoutubeLogin(msg);
+	},
 } as MessageHandler;
 
 client.on('message', async (msg) => {
