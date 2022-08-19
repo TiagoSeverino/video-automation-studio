@@ -78,9 +78,7 @@ interface CronJob {
 	job: () => any;
 }
 
-interface Cookie {
-	domain: string;
+interface TiktokAccount {
 	name: string;
-	path: string;
-	value: string;
+	cookies: any[];
 }
