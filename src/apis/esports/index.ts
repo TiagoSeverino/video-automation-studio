@@ -55,11 +55,11 @@ export const getMatches = async (
 export const getTitle = (game: ESportsVideo) => {
 	switch (game) {
 		case 'csgo':
-			return 'CSGO Match Results';
+			return 'CSGO Results';
 		case 'valorant':
-			return 'Valorant Match Results';
+			return 'Valorant Results';
 		default:
-			return `${game.toUpperCase()} Match Results`;
+			return `${game.toUpperCase()} Results`;
 	}
 };
 
