@@ -10,7 +10,7 @@ export default [
 	},
 	{
 		name: 'Render ESports matches',
-		cron: '25 */6 * * *',
+		cron: '25 */12 * * *',
 		job: renderVideo,
 	},
 	{
