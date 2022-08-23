@@ -4,6 +4,7 @@ import {availableESports, updateMatchResults} from '..';
 import ESportsVideoData from '../../../database/models/ESportsVideoData';
 import MatchResult from '../../../database/models/MatchResult';
 import log from '../../log';
+import render from '../Video/render';
 
 export const renderVideo = (completeOnly?: boolean) =>
 	availableESports.map(async (game) => {
@@ -13,10 +14,10 @@ export const renderVideo = (completeOnly?: boolean) =>
 			videoId: {$exists: false},
 		});
 
-		if (matchesNotRendered.length === 0) return;
-
 		while (completeOnly && matchesNotRendered.length % 5 !== 0)
 			matchesNotRendered.pop();
+
+		if (matchesNotRendered.length === 0) return;
 
 		//Render matches
 		log(`Rendering ${matchesNotRendered.length} matches for ${game}`);
