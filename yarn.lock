@@ -3875,6 +3875,23 @@ puppeteer@^16.1.1:
     unbzip2-stream "1.4.3"
     ws "8.8.1"
 
+puppeteer@^16.2.0:
+  version "16.2.0"
+  resolved "https://registry.yarnpkg.com/puppeteer/-/puppeteer-16.2.0.tgz#3fc9cc0c461d3166a98562a7dcd0bf3424a0523c"
+  integrity sha512-7Au6iC98rS6WEAD110V4Bxd0iIbqoFtzz9XzkG1BSofidS1VAJ881E1+GFR7Xn2Yea0hbj8n0ErzRyseMp1Ctg==
+  dependencies:
+    cross-fetch "3.1.5"
+    debug "4.3.4"
+    devtools-protocol "0.0.1019158"
+    extract-zip "2.0.1"
+    https-proxy-agent "5.0.1"
+    progress "2.0.3"
+    proxy-from-env "1.1.0"
+    rimraf "3.0.2"
+    tar-fs "2.1.1"
+    unbzip2-stream "1.4.3"
+    ws "8.8.1"
+
 qs@6.10.3:
   version "6.10.3"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.10.3.tgz#d6cde1b2ffca87b5aa57889816c5f81535e22e8e"
@@ -4562,6 +4579,15 @@ through@^2.3.8:
   version "2.3.8"
   resolved "https://registry.yarnpkg.com/through/-/through-2.3.8.tgz#0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
   integrity sha512-w89qg7PI8wAdvX60bMDP+bFoD5Dvhm9oLheFp5O4a2QF0cSBGsBX4qZmadPMvVqlLJBBci+WqGGOAPvcDeNSVg==
+
+tiktok-uploader@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/tiktok-uploader/-/tiktok-uploader-1.0.1.tgz#de2a7b8124ac1adaed8a71ec2677623ab2407112"
+  integrity sha512-CPaWHxeuJv0kZ5AVBxTRsHMqv1nFocuE7ybuBScDj7u0qBbSVarqcxHLBHpwYYAljrVj4EjIo9MinAmrlDGKTQ==
+  dependencies:
+    puppeteer "^16.2.0"
+    puppeteer-extra "^3.3.4"
+    puppeteer-extra-plugin-stealth "^2.11.1"
 
 to-array@0.1.4:
   version "0.1.4"
