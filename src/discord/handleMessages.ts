@@ -15,6 +15,9 @@ import {getQuote} from '../apis/quotes';
 import {searchImages} from '../apis/google/search';
 import {logError} from '../apis/log';
 import YoutubeCredentialStorage from '../database/models/YoutubeCredentialStorage';
+import ESportsVideoData from '../database/models/ESportsVideoData';
+import {availableESports} from '../apis/esports';
+import MatchResult from '../database/models/MatchResult';
 
 interface MessageHandler {
 	[cmd: string]: (args: string[], message: Message) => Promise<any> | any;
@@ -171,6 +174,39 @@ const handleUserMessage = {
 	},
 	youtube: async (_, msg) => {
 		await handleYoutubeLogin(msg);
+	},
+	remaining: async (_, msg) => {
+		const reply = [];
+		const videosForTiktok = (await ESportsVideoData.find()).filter(
+			(videoData) => !videoData.platforms?.tiktok?.id
+		);
+
+		const videosForYoutube = (await ESportsVideoData.find()).filter(
+			(videoData) => !videoData.platforms?.youtube?.id
+		);
+
+		if (videosForTiktok.length > 0)
+			reply.push(`${videosForTiktok.length} videos for tiktok`);
+
+		if (videosForYoutube.length > 0)
+			reply.push(`${videosForYoutube.length} videos for youtube`);
+
+		await Promise.all(
+			availableESports.map(async (game) => {
+				const remainingRender = (await MatchResult.find({game})).filter(
+					(m) => !m.videoId
+				);
+
+				if (remainingRender.length === 0) return;
+
+				reply.push(
+					`${remainingRender.length} matches to render for ${game}`
+				);
+			})
+		);
+
+		if (reply.length === 0) msg.reply('No remaining renders/uploads');
+		else msg.reply(reply);
 	},
 } as MessageHandler;
 
