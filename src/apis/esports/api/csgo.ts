@@ -1,4 +1,4 @@
-import HLTV from 'hltv';
+import HLTV from 'hltv-oni';
 import {dateToString} from '../../../utils/date';
 
 const fixLogoUrl = (url: string) =>

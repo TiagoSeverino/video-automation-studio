@@ -2523,9 +2523,10 @@ hh-mm-ss@~1.2.0:
   dependencies:
     zero-fill "^2.2.3"
 
-hltv@TiagoSeverino/HLTV:
+hltv-oni@^3.4.2:
   version "3.4.2"
-  resolved "https://codeload.github.com/TiagoSeverino/HLTV/tar.gz/6eb66537a280bd584c7d0b4ad55d0f94c4b1f7dc"
+  resolved "https://registry.yarnpkg.com/hltv-oni/-/hltv-oni-3.4.2.tgz#15a755725b0969d8df4a7a514972246203a39d23"
+  integrity sha512-Bo49qle4b1+9QeoIj1MslU8D+925QA2I2tkmonS+2pJqxvifZZ/eSz2Esa9fL23puYLy/I7TmgDHzYXOcDttjg==
   dependencies:
     cheerio "1.0.0-rc.12"
     request "2.88.2"
