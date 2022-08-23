@@ -56,7 +56,7 @@ export default async () => {
 					tiktokAccount.cookies
 				);
 
-				if (!tiktokId) continue;
+				if (!tiktokId) break;
 
 				videoData.platforms = {
 					...videoData.platforms,
