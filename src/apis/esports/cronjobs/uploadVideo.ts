@@ -15,31 +15,30 @@ export default async () => {
 		if (!youtubeCredentials)
 			return logError('No youtube credentials found');
 
-		await Promise.all(
-			videosForYoutube.map(async (videoData) => {
-				try {
-					const youtubeId = await uploadYoutube(
-						videoData,
-						youtubeCredentials,
-						youtubeCredentials.tokens[0]
-					);
+		for (const videoData of videosForYoutube) {
+			try {
+				const youtubeId = await uploadYoutube(
+					videoData,
+					youtubeCredentials,
+					youtubeCredentials.tokens[0]
+				);
 
-					videoData.platforms = {
-						...videoData.platforms,
-						youtube: {
-							id: youtubeId,
-						},
-					};
+				videoData.platforms = {
+					...videoData.platforms,
+					youtube: {
+						id: youtubeId,
+					},
+				};
 
-					await videoData.save();
+				await videoData.save();
 
-					log(`https://youtu.be/${youtubeId}`);
-				} catch (err) {
-					logError("Couldn't upload video to youtube");
-					console.error(err);
-				}
-			})
-		);
+				log(`https://youtu.be/${youtubeId}`);
+			} catch (err) {
+				logError("Couldn't upload video to youtube");
+				console.error(err);
+				break;
+			}
+		}
 	}
 
 	const videosForTiktok = (await ESportsVideoData.find()).filter(
@@ -72,6 +71,8 @@ export default async () => {
 			} catch (err) {
 				logError("Couldn't upload video to tiktok");
 				console.error(err);
+
+				break;
 			}
 		}
 	}
