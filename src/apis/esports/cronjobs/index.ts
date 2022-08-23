@@ -1,21 +1,26 @@
 import fetchMatches from './fetchMatches';
-import renderVideo from './renderVideo';
+import {renderFullMatchVideo, renderVideo} from './renderVideo';
 import uploadVideo from './uploadVideo';
 
 export default [
 	{
 		name: 'Fetch ESports matches',
-		cron: '0 * * * *',
+		cron: '*/15 * * * *',
 		job: fetchMatches,
 	},
 	{
 		name: 'Render ESports matches',
-		cron: '15 */6 * * *',
+		cron: '25 */6 * * *',
 		job: renderVideo,
 	},
 	{
+		name: 'Render ESports matches',
+		cron: '*/20 * * * *',
+		job: renderFullMatchVideo,
+	},
+	{
 		name: 'Upload ESports matches',
-		cron: '30 * * * *',
+		cron: '*/30 * * * *',
 		job: uploadVideo,
 	},
 ] as CronJob[];
