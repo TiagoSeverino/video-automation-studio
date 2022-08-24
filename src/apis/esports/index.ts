@@ -52,6 +52,29 @@ export const getMatches = async (
 	return Promise.all([]);
 };
 
+export const getYoutubeChannelName = (game: ESportsVideo): string => {
+	switch (game) {
+		case 'csgo':
+			return 'Daily CSGO';
+		case 'valorant':
+			return 'Daily Valorant';
+		//Dashfight
+		case 'ssbu':
+		case 'tekken7':
+		case 'sf5':
+		case 'mk11':
+		case 'dbfz':
+		case 'ggst':
+		case 'sc6':
+		case 'bh':
+		case 'skullgirls':
+		case 'ki':
+		case 'mv':
+		default:
+			return 'Daily Fights';
+	}
+};
+
 export const getTitle = (game: ESportsVideo) => {
 	switch (game) {
 		case 'csgo':
