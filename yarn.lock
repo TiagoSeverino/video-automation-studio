@@ -5076,10 +5076,10 @@ youtube-dl@^3.5.0:
     streamify "~1.0.0"
     universalify "~2.0.0"
 
-youtube-videos-uploader-oni@^1.3.80:
-  version "1.3.80"
-  resolved "https://registry.yarnpkg.com/youtube-videos-uploader-oni/-/youtube-videos-uploader-oni-1.3.80.tgz#aeb07ba2e40ab63872f5f1fdc68be781085e2283"
-  integrity sha512-hah3uum3yJzWOtBJU8BBHyOXab1AGQGUFebDd8YhSd4NIVtEggD8RjXnNMGVyqIeU9hK0ArNmg0tIf9SjtW7bQ==
+youtube-videos-uploader-oni@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/youtube-videos-uploader-oni/-/youtube-videos-uploader-oni-2.0.0.tgz#a529d4a40387f3e792cf66540c5d17d1373e8612"
+  integrity sha512-4+XYFBgbgVxdPjAubL+1GC5NexLB4yJU/K5Q26F8VmYf1JbLVzRclNjo8YTywZX/IOLOwx5NHXXeIHFdkv/jPA==
   dependencies:
     prettier "^2.4.1"
     puppeteer "^14.4.1"
