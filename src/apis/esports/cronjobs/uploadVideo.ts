@@ -3,7 +3,7 @@ import TiktokAccount from '../../../database/models/TiktokAccount';
 import YoutubeCredentialStorage from '../../../database/models/YoutubeCredentialStorage';
 import uploadYoutube from '../../google/youtube';
 import log, {logError} from '../../log';
-import uploadTiktok from 'tiktok-uploader';
+import uploadTiktok from '@TiagoSeverino/tiktok-uploader';
 
 export default async () => {
 	const videosForYoutube = (await ESportsVideoData.find()).filter(
