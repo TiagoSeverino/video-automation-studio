@@ -38,7 +38,6 @@ export default async (discipline: string): Promise<MatchResult[]> => {
 				return {
 					id: `${discipline}-${match.id}`,
 					tournament: match.stage.tournament.name,
-					event: match.stage.tournament.event.name,
 					team1: {
 						name: match.participants[0].player.nickname,
 						logo: fixLogoUrl(
