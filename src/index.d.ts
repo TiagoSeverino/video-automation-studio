@@ -1,5 +1,3 @@
-import {availableESports} from './utils/availableESports';
-
 interface VideoData {
 	path: string;
 	title: string;
@@ -39,6 +37,30 @@ interface TeamData {
 	logo?: string;
 	rounds: number;
 }
+
+const availableESports = [
+	'csgo',
+	'valorant',
+	'ssbu',
+	'tekken7',
+	'sf5',
+	'mk11',
+	'dbfz',
+	'ggst',
+	'sc6',
+	'bh',
+	'skullgirls',
+	'ki',
+	'mv',
+	'dota2',
+	'lol',
+	'wildrift',
+	'rainbowsix',
+	'rocketleague',
+	'overwatch',
+	'halo',
+	'callofduty',
+] as const;
 
 type ESportsVideo = typeof availableESports[number];
 
