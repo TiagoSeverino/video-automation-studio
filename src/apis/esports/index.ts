@@ -88,10 +88,25 @@ export const getYoutubeChannelName = (game: ESportsVideo): string => {
 
 export const getTitle = (game: ESportsVideo) => {
 	switch (game) {
-		case 'csgo':
-			return 'CSGO Results';
+		case 'dota2':
+			return 'Dota Results';
+		case 'lol':
+			return 'LoL Results';
+		case 'callofduty':
+			return 'CoD Results';
+		case 'rainbowsix':
+			return 'R6S Results';
+		case 'rocketleague':
+			return 'Rocket League Results';
+
+		case 'halo':
 		case 'valorant':
-			return 'Valorant Results';
+		case 'overwatch':
+		case 'wildrift':
+			return `${game.charAt(0).toUpperCase()}${game
+				.toLowerCase()
+				.slice(1)} Results`;
+
 		default:
 			return `${game.toUpperCase()} Results`;
 	}
