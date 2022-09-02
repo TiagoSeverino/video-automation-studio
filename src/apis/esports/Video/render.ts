@@ -1,5 +1,4 @@
 import {getTitle} from '../';
-import {categoryIds} from '../../google/youtube';
 import renderComposition from '../../../utils/renderComposition';
 import {dateToString} from '../../../utils/date';
 import getChunks from '../../../utils/getChunks';
@@ -50,7 +49,7 @@ export default async (
 					),
 				],
 				path,
-				categoryId: categoryIds.Gaming,
+				categoryId: YoutubeCategoryIds.Gaming,
 				game,
 			},
 			results: chunk,

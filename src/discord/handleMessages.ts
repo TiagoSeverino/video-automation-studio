@@ -3,12 +3,6 @@ import {getSubtitles} from 'youtube-captions-scraper';
 
 import downloader from '../apis/downloader';
 import {getTwitterThread} from '../apis/twitter';
-import {
-	authenticateWithOAuthCredentials,
-	authenticateWithOAuthToken,
-	categoryIds,
-	requestYoutubeConsentUrl,
-} from '../apis/google/youtube';
 import client from './discord';
 import getYoutubeID from '../utils/getYoutubeID';
 import {getQuote} from '../apis/quotes';
@@ -75,31 +69,6 @@ const promptVideoData = async (msg: Message) => {
 	return {title, description, tags};
 };
 
-const handleYoutubeLogin = async (msg: Message) => {
-	const youtubeCredential = await YoutubeCredentialStorage.findOne();
-	if (!youtubeCredential) return;
-
-	if (youtubeCredential.tokens.length > 0) {
-		await authenticateWithOAuthCredentials(
-			youtubeCredential,
-			youtubeCredential.tokens[0]
-		);
-	} else {
-		const youtubeConsentUrl = requestYoutubeConsentUrl(youtubeCredential);
-		await msg.reply(`Login to Youtube: ${youtubeConsentUrl}`);
-
-		const youtubeToken = await waitReply(msg);
-
-		const credentials = await authenticateWithOAuthToken(
-			youtubeCredential,
-			youtubeToken
-		);
-
-		youtubeCredential.tokens.push(credentials);
-		await youtubeCredential.save();
-	}
-};
-
 const userMessageDescription = {
 	download: ['Downloads a video and reupload', ['<url>']],
 } as CommandDescription;
@@ -126,7 +95,7 @@ const handleUserMessage = {
 		await handleYoutubeUpload(msg, {
 			path,
 			...videoData,
-			categoryId: categoryIds.Gaming,
+			categoryId: YoutubeCategoryIds.Gaming,
 		});
 	},
 	tt: async ([url], msg) => {
@@ -171,9 +140,6 @@ const handleUserMessage = {
 		msg.reply(`${quote.author} - ${quote.content}`);
 
 		console.log(quote);
-	},
-	youtube: async (_, msg) => {
-		await handleYoutubeLogin(msg);
 	},
 	remaining: async (_, msg) => {
 		const reply = [];

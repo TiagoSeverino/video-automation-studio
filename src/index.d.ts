@@ -83,6 +83,10 @@ interface YoutubeCredentialStorage extends YoutubeOAuthToken {
 	tokens: YoutubeCrential[];
 }
 
+enum YoutubeCategoryIds {
+	Gaming = '20',
+}
+
 interface CronJob {
 	name: string;
 	cron: string;
