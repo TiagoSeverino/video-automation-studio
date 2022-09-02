@@ -64,8 +64,25 @@ export const getYoutubeChannelName = (game: ESportsVideo): string => {
 		case 'skullgirls':
 		case 'ki':
 		case 'mv':
-		default:
 			return 'Daily Fights';
+		case 'dota2':
+			return 'Daily Dota';
+		case 'lol':
+			return 'Daily LoL';
+		case 'wildrift':
+			return 'Daily Wild Rift';
+		case 'rainbowsix':
+			return 'Daily R6S';
+		case 'rocketleague':
+			return 'Daily Rocket League';
+		case 'overwatch':
+			return 'Daily Overwatch';
+		case 'halo':
+			return 'Daily Halo';
+		case 'callofduty':
+			return 'Daily Call of Duty';
+		default:
+			return 'Daily ESports';
 	}
 };
 
