@@ -14,7 +14,7 @@
 	"license": "UNLICENSED",
 	"dependencies": {
 		"@TiagoSeverino/tiktok-uploader": "^1.0.0",
-		"@TiagoSeverino/youtube-uploader": "^1.0.2",
+		"@TiagoSeverino/youtube-uploader": "^1.0.3",
 		"@remotion/cli": "^3.0.0",
 		"@remotion/eslint-config": "^3.0.0",
 		"axios": "^0.27.2",
