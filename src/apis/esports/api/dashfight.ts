@@ -4,7 +4,20 @@ import {DashfightApiResponse} from './dashfight.d';
 const fixLogoUrl = (url: string) =>
 	url.startsWith('/') ? `https://dashfight.com${url}` : url;
 
-export default async (discipline: string): Promise<MatchResult[]> => {
+type discipines =
+	| 'ssbu'
+	| 'tekken7'
+	| 'sf5'
+	| 'mk11'
+	| 'dbfz'
+	| 'ggst'
+	| 'sc6'
+	| 'bh'
+	| 'skullgirls'
+	| 'ki'
+	| 'mv';
+
+export default async (discipline: discipines): Promise<MatchResult[]> => {
 	const res = (await (
 		await axios.post('https://api.dashfight.com/', {
 			operationName: 'matches',
