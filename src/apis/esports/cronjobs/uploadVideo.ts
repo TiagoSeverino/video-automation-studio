@@ -52,7 +52,13 @@ export default async () => {
 		for (const videoData of videosForTiktok) {
 			try {
 				const tiktokId = await uploadTiktok(
-					videoData,
+					{
+						path: videoData.path,
+						title: `${videoData.title} ${videoData.tags
+							.sort((a, b) => a.length - b.length)
+							.map((t) => `#${t}`.replace(/\s/g, ''))
+							.join(' ')}`.slice(0, 150),
+					},
 					tiktokAccount.cookies
 				);
 
