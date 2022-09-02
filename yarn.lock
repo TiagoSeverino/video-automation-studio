@@ -11,6 +11,15 @@
     puppeteer-extra "^3.3.4"
     puppeteer-extra-plugin-stealth "^2.11.1"
 
+"@TiagoSeverino/youtube-uploader@^1.0.2":
+  version "1.0.2"
+  resolved "https://npm.pkg.github.com/download/@TiagoSeverino/youtube-uploader/1.0.2/78abc77831b2dd0f446ae1384003a55539ee98ba#78abc77831b2dd0f446ae1384003a55539ee98ba"
+  integrity sha512-Rozx2ocz1COruvXyIIuHikTJmWJREzOiIhzXRSJKUHPFWTNPVombCnB3sqokkNu80yw2n/5M4OSRyvHjVRKD6w==
+  dependencies:
+    puppeteer "^16.2.0"
+    puppeteer-extra "^3.3.4"
+    puppeteer-extra-plugin-stealth "^2.11.1"
+
 "@cspotcode/source-map-support@^0.8.0":
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/@cspotcode/source-map-support/-/source-map-support-0.8.1.tgz#00629c35a688e05a88b1cda684fb9d5e73f000a1"
