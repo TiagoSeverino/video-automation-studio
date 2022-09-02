@@ -58,11 +58,6 @@ const availableESports = [
 	'rainbowsix',
 	'rocketleague',
 	'overwatch',
-	'fifa',
-	'pubg',
-	'hearthstone',
-	'artifact',
-	'heroesofthestorm',
 	'halo',
 	'callofduty',
 ] as const;

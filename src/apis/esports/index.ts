@@ -33,11 +33,6 @@ export const getMatches = async (
 			case 'rainbowsix':
 			case 'rocketleague':
 			case 'overwatch':
-			case 'fifa':
-			case 'pubg':
-			case 'hearthstone':
-			case 'artifact':
-			case 'heroesofthestorm':
 			case 'halo':
 			case 'callofduty':
 				return getEGamersWorldMatches(game);
