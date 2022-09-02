@@ -7,8 +7,8 @@ import {availableESports} from '../../../utils/availableESports';
 import log from '../../log';
 import render from '../Video/render';
 
-export const renderVideo = (completeOnly?: boolean) =>
-	availableESports.map(async (game) => {
+export const renderVideo = async (completeOnly?: boolean) => {
+	for (const game of availableESports) {
 		//Select matches not rendered
 		const matchesNotRendered = await MatchResult.find({
 			game,
@@ -18,7 +18,7 @@ export const renderVideo = (completeOnly?: boolean) =>
 		while (completeOnly && matchesNotRendered.length % 5 !== 0)
 			matchesNotRendered.pop();
 
-		if (matchesNotRendered.length === 0) return;
+		if (matchesNotRendered.length === 0) continue;
 
 		//Render matches
 		log(`Rendering ${matchesNotRendered.length} matches for ${game}`);
@@ -56,6 +56,7 @@ export const renderVideo = (completeOnly?: boolean) =>
 				})
 			);
 		});
-	});
+	}
+};
 
 export const renderFullMatchVideo = () => renderVideo(true);
