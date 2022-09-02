@@ -17,6 +17,7 @@ import {logError} from '../apis/log';
 import YoutubeCredentialStorage from '../database/models/YoutubeCredentialStorage';
 import ESportsVideoData from '../database/models/ESportsVideoData';
 import MatchResult from '../database/models/MatchResult';
+import {availableESports} from '../utils/availableESports';
 
 interface MessageHandler {
 	[cmd: string]: (args: string[], message: Message) => Promise<any> | any;

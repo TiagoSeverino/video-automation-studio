@@ -3,6 +3,7 @@ import {startOfDay, endOfDay} from 'date-fns';
 import {updateMatchResults} from '..';
 import ESportsVideoData from '../../../database/models/ESportsVideoData';
 import MatchResult from '../../../database/models/MatchResult';
+import {availableESports} from '../../../utils/availableESports';
 import log from '../../log';
 import render from '../Video/render';
 

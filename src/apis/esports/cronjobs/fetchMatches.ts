@@ -1,5 +1,6 @@
 import {getMatches, updateMatchResults} from '..';
 import MatchResult from '../../../database/models/MatchResult';
+import {availableESports} from '../../../utils/availableESports';
 import log from '../../log';
 
 export default () =>
