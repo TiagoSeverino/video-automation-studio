@@ -3,22 +3,7 @@ import {logError} from '../log';
 import getCSGOMatches from './api/csgo';
 import getDashfightMatches from './api/dashfight';
 import getValorantMatches from './api/valorant';
-
-export const availableESports = [
-	'csgo',
-	'valorant',
-	'ssbu',
-	'tekken7',
-	'sf5',
-	'mk11',
-	'dbfz',
-	'ggst',
-	'sc6',
-	'bh',
-	'skullgirls',
-	'ki',
-	'mv',
-] as ESportsVideo[];
+import getEGamersWorldMatches from './api/egamersworld';
 
 export const getMatches = async (
 	game: ESportsVideo
@@ -42,6 +27,20 @@ export const getMatches = async (
 			case 'ki':
 			case 'mv':
 				return getDashfightMatches(game);
+			case 'dota2':
+			case 'lol':
+			case 'wildrift':
+			case 'rainbowsix':
+			case 'rocketleague':
+			case 'overwatch':
+			case 'fifa':
+			case 'pubg':
+			case 'hearthstone':
+			case 'artifact':
+			case 'heroesofthestorm':
+			case 'halo':
+			case 'callofduty':
+				return getEGamersWorldMatches(game);
 			default:
 				return Promise.reject(new Error('Invalid game'));
 		}

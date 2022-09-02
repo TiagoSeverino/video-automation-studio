@@ -1,4 +1,4 @@
-import {availableESports, getMatches, updateMatchResults} from '..';
+import {getMatches, updateMatchResults} from '..';
 import MatchResult from '../../../database/models/MatchResult';
 import log from '../../log';
 

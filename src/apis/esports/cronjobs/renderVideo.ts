@@ -1,6 +1,6 @@
 import {startOfDay, endOfDay} from 'date-fns';
 
-import {availableESports, updateMatchResults} from '..';
+import {updateMatchResults} from '..';
 import ESportsVideoData from '../../../database/models/ESportsVideoData';
 import MatchResult from '../../../database/models/MatchResult';
 import log from '../../log';

@@ -16,7 +16,6 @@ import {searchImages} from '../apis/google/search';
 import {logError} from '../apis/log';
 import YoutubeCredentialStorage from '../database/models/YoutubeCredentialStorage';
 import ESportsVideoData from '../database/models/ESportsVideoData';
-import {availableESports} from '../apis/esports';
 import MatchResult from '../database/models/MatchResult';
 
 interface MessageHandler {

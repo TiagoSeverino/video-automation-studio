@@ -38,20 +38,36 @@ interface TeamData {
 	rounds: number;
 }
 
-type ESportsVideo =
-	| 'csgo'
-	| 'valorant'
-	| 'ssbu'
-	| 'tekken7'
-	| 'sf5'
-	| 'mk11'
-	| 'dbfz'
-	| 'ggst'
-	| 'sc6'
-	| 'bh'
-	| 'skullgirls'
-	| 'ki'
-	| 'mv';
+const availableESports = [
+	'csgo',
+	'valorant',
+	'ssbu',
+	'tekken7',
+	'sf5',
+	'mk11',
+	'dbfz',
+	'ggst',
+	'sc6',
+	'bh',
+	'skullgirls',
+	'ki',
+	'mv',
+	'dota2',
+	'lol',
+	'wildrift',
+	'rainbowsix',
+	'rocketleague',
+	'overwatch',
+	'fifa',
+	'pubg',
+	'hearthstone',
+	'artifact',
+	'heroesofthestorm',
+	'halo',
+	'callofduty',
+] as const;
+
+type ESportsVideo = typeof availableESports[number];
 
 type VideoCompositions = 'ESportResult';
 
