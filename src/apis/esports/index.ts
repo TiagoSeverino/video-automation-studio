@@ -86,18 +86,21 @@ export const getYoutubeChannelName = (game: ESportsVideo): string => {
 	}
 };
 
-export const getTitle = (game: ESportsVideo) => {
+export const getTitle = (game: ESportsVideo) =>
+	`${getGameDisplayName(game)} Results`;
+
+const getGameDisplayName = (game: ESportsVideo) => {
 	switch (game) {
 		case 'dota2':
-			return 'Dota Results';
+			return 'Dota';
 		case 'lol':
-			return 'LoL Results';
+			return 'LoL';
 		case 'callofduty':
-			return 'CoD Results';
+			return 'CoD';
 		case 'rainbowsix':
-			return 'R6S Results';
+			return 'R6S';
 		case 'rocketleague':
-			return 'Rocket League Results';
+			return 'Rocket League';
 
 		case 'halo':
 		case 'valorant':
@@ -105,10 +108,10 @@ export const getTitle = (game: ESportsVideo) => {
 		case 'wildrift':
 			return `${game.charAt(0).toUpperCase()}${game
 				.toLowerCase()
-				.slice(1)} Results`;
+				.slice(1)}`;
 
 		default:
-			return `${game.toUpperCase()} Results`;
+			return game.toUpperCase();
 	}
 };
 
