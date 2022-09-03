@@ -66,23 +66,6 @@ type ESportsVideo = typeof availableESports[number];
 
 type VideoCompositions = 'ESportResult';
 
-interface YoutubeCredential {
-	access_token: string;
-	refresh_token: string;
-	scope: string;
-	token_type: string;
-	expiry_date: number;
-}
-
-interface YoutubeOAuthToken {
-	client_id: string;
-	client_secret: string;
-}
-
-interface YoutubeCredentialStorage extends YoutubeOAuthToken {
-	tokens: YoutubeCrential[];
-}
-
 enum YoutubeCategoryIds {
 	Gaming = '20',
 }
@@ -94,6 +77,11 @@ interface CronJob {
 }
 
 interface TiktokAccount {
+	name: string;
+	cookies: any[];
+}
+
+interface YoutubeAccount {
 	name: string;
 	cookies: any[];
 }

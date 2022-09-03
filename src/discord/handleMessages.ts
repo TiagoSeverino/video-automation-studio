@@ -8,7 +8,6 @@ import getYoutubeID from '../utils/getYoutubeID';
 import {getQuote} from '../apis/quotes';
 import {searchImages} from '../apis/google/search';
 import {logError} from '../apis/log';
-import YoutubeCredentialStorage from '../database/models/YoutubeCredentialStorage';
 import ESportsVideoData from '../database/models/ESportsVideoData';
 import MatchResult from '../database/models/MatchResult';
 import {availableESports} from '../utils/availableESports';

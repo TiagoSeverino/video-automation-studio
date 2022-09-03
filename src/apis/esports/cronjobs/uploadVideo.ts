@@ -1,10 +1,10 @@
 import ESportsVideoData from '../../../database/models/ESportsVideoData';
 import TiktokAccount from '../../../database/models/TiktokAccount';
-import YoutubeCredentialStorage from '../../../database/models/YoutubeCredentialStorage';
 import log, {logError} from '../../log';
 import uploadTiktok from '@TiagoSeverino/tiktok-uploader';
 import uploadYoutube from '@TiagoSeverino/youtube-uploader';
 import {getYoutubeChannelName} from '..';
+import YoutubeAccount from '../../../database/models/YoutubeAccount';
 
 export default async () => {
 	const videosForTiktok = (await ESportsVideoData.find()).filter(
@@ -54,9 +54,8 @@ export default async () => {
 	);
 
 	if (videosForYoutube.length > 0) {
-		const youtubeCredentials = await YoutubeCredentialStorage.findOne();
-		if (!youtubeCredentials)
-			return logError('No youtube credentials found');
+		const youtubeAccount = await YoutubeAccount.findOne();
+		if (!youtubeAccount) return logError('No Youtube account found');
 
 		for (const videoData of videosForYoutube) {
 			try {
@@ -76,7 +75,7 @@ Linkedin - https://www.linkedin.com/in/tiagoseverino/`,
 						tags,
 						channelName,
 					},
-					require('../../../../yt-auth/cookies.json')
+					youtubeAccount.cookies
 				);
 
 				if (!url) continue;
