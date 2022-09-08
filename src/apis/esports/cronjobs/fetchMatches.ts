@@ -21,6 +21,6 @@ export default () =>
 			if (after > before)
 				log(`${after - before} matches found for ${game}`);
 		} catch (e) {
-			logError(`Error Fetching ${gane}: ${e}`);
+			logError(`Error Fetching ${game}: ${e}`);
 		}
 	});
