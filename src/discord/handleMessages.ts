@@ -132,7 +132,7 @@ const handleUserMessage = {
 
 		searchImages(`${quote.author} ${quote.tags.join(' ')}`, 1).then(
 			(images) => {
-				images.map((img) => msg.reply(img));
+				images.map((img) => img && msg.reply(img));
 			}
 		);
 
