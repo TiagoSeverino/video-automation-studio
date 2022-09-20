@@ -11,6 +11,9 @@ import {logError} from '../apis/log';
 import ESportsVideoData from '../database/models/ESportsVideoData';
 import MatchResult from '../database/models/MatchResult';
 import {availableESports} from '../utils/availableESports';
+import {renderVideo} from '../apis/esports/cronjobs/renderVideo';
+import uploadVideo from '../apis/esports/cronjobs/uploadVideo';
+import fetchMatches from '../apis/esports/cronjobs/fetchMatches';
 
 interface MessageHandler {
 	[cmd: string]: (args: string[], message: Message) => Promise<any> | any;
@@ -172,6 +175,15 @@ const handleUserMessage = {
 
 		if (reply.length === 0) msg.reply('No remaining renders/uploads');
 		else msg.reply(reply);
+	},
+	render: async ([completeOnly = 'true'], msg) => {
+		renderVideo(completeOnly.toLowerCase() === 'true');
+	},
+	upload: async (_, msg) => {
+		uploadVideo();
+	},
+	fetch: async (_, msg) => {
+		fetchMatches();
 	},
 } as MessageHandler;
 
